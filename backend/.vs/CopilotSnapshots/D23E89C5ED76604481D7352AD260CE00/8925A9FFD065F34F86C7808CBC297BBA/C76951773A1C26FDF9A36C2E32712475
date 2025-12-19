@@ -1,0 +1,52 @@
+﻿using backend1.Data;
+using backend1.Repositories;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi;
+
+// *** BỔ SUNG DÒNG NÀY ĐỂ KHẮC PHỤC LỖI ***
+using Microsoft.OpenApi.Models;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+
+builder.Services.AddControllers();
+// Enable Swagger/OpenAPI
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    // Lỗi xảy ra ở đây vì thiếu using Microsoft.OpenApi.Models;
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Tên API Dự Án Của Bạn",
+        Version = "v1",
+        Description = "Mô tả chi tiết về API Backend"
+    });
+});
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(connectionString));
+
+// Khai báo Repository Pattern
+builder.Services.AddScoped<IProductRepository, SQLProductRepository>();
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Tên API Dự Án Của Bạn v1");
+    });
+}
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();

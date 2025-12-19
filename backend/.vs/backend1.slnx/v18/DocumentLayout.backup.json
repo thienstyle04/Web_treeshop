@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\folder\\Program\\doanAngular\\Web_treeshop\\backend\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{440CE147-295D-19AC-4B49-CCCBF90B912E}|backend1\\backend1.csproj|d:\\folder\\program\\doanangular\\web_treeshop\\backend\\backend1\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{440CE147-295D-19AC-4B49-CCCBF90B912E}|backend1\\backend1.csproj|solutionrelative:backend1\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\folder\\Program\\doanAngular\\Web_treeshop\\backend\\backend1\\Program.cs",
+              "RelativeDocumentMoniker": "backend1\\Program.cs",
+              "ToolTip": "D:\\folder\\Program\\doanAngular\\Web_treeshop\\backend\\backend1\\Program.cs",
+              "RelativeToolTip": "backend1\\Program.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAwAAABgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-19T05:31:50.286Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
