@@ -4,6 +4,16 @@
         <name>backend1</name>
     </assembly>
     <members>
+        <member name="M:backend1.Controllers.AuthController.Register(backend1.Models.DTO.RegisterRequestDTO)">
+            <summary>
+            Đăng ký tài khoản mới
+            </summary>
+        </member>
+        <member name="M:backend1.Controllers.AuthController.Login(backend1.Models.DTO.LoginRequestDTO)">
+            <summary>
+            Đăng nhập và nhận JWT Token
+            </summary>
+        </member>
         <member name="T:backend1.Migrations.InitialDatabaseMigration">
             <inheritdoc />
         </member>
@@ -14,6 +24,18 @@
             <inheritdoc />
         </member>
         <member name="M:backend1.Migrations.InitialDatabaseMigration.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:backend1.Migrations.LoginAuthDb.CreateAuthDatabase">
+            <inheritdoc />
+        </member>
+        <member name="M:backend1.Migrations.LoginAuthDb.CreateAuthDatabase.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:backend1.Migrations.LoginAuthDb.CreateAuthDatabase.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:backend1.Migrations.LoginAuthDb.CreateAuthDatabase.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
         <member name="T:Program">

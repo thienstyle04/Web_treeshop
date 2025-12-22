@@ -16,27 +16,61 @@ namespace backend1.Repositories
         {
             _dbContext = dbContext;
         }
-        public async Task<List<ProductDetailsDTO>> GetAllProductsAsync()
+        public async Task<List<ProductDetailsDTO>> GetAllProductsAsync(
+            string? filterOn = null,
+            string? filterQuery = null,
+            string? sortBy = null,
+            bool isAscending = true,
+            int pageNumber = 1,
+            int pageSize = 1000)
         {
-            // Logic truy cập DB (sử dụng Include và ToListAsync)
-            var productsDomain = await _dbContext.Products
+            // Tạo Queryable từ bảng Products và ánh xạ sang DTO
+            var allProducts = _dbContext.Products
                 .Include(p => p.Category)
                 .Include(p => p.Images)
-                .ToListAsync();
+                .Select(product => new ProductDetailsDTO()
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    ScientificName = product.ScientificName,
+                    Description = product.Description,
+                    Price = product.Price,
+                    StockQuantity = product.StockQuantity,
+                    DateAdded = product.DateAdded,
+                    CategoryName = product.Category != null ? product.Category.Name : null,
+                    ImageUrls = product.Images.Select(i => i.FilePath).ToList()
+                })
+                .AsQueryable(); // Chuyển sang IQueryable để xử lý tiếp
 
-            // Ánh xạ Domain Model sang DTO
-            return productsDomain.Select(product => new ProductDetailsDTO()
+            // Lọc dữ liệu
+            if (!string.IsNullOrWhiteSpace(filterOn) && !string.IsNullOrWhiteSpace(filterQuery))
             {
-                Id = product.Id,
-                Name = product.Name,
-                ScientificName = product.ScientificName,
-                Description = product.Description,
-                Price = product.Price,
-                StockQuantity = product.StockQuantity,
-                DateAdded = product.DateAdded,
-                CategoryName = product.Category?.Name,
-                ImageUrls = product.Images.Select(i => i.FilePath).ToList()
-            }).ToList();
+                // Lọc theo Tên sản phẩm (Name)
+                if (filterOn.Equals("Name", StringComparison.OrdinalIgnoreCase))
+                {
+                    allProducts = allProducts.Where(x => x.Name.Contains(filterQuery));
+                }
+                // Có thể thêm các trường khác nếu muốn, ví dụ CategoryName
+            }
+
+            //Sắp xếp dữ liệu
+            if (!string.IsNullOrWhiteSpace(sortBy))
+            {
+                if (sortBy.Equals("Name", StringComparison.OrdinalIgnoreCase))
+                {
+                    allProducts = isAscending ? allProducts.OrderBy(x => x.Name) : allProducts.OrderByDescending(x => x.Name);
+                }
+                else if (sortBy.Equals("Price", StringComparison.OrdinalIgnoreCase))
+                {
+                    allProducts = isAscending ? allProducts.OrderBy(x => x.Price) : allProducts.OrderByDescending(x => x.Price);
+                }
+            }
+
+            //Phân trang
+            var skipResults = (pageNumber - 1) * pageSize;
+
+            // Thực thi query và trả về kết quả
+            return await allProducts.Skip(skipResults).Take(pageSize).ToListAsync();
         }
 
         public async Task<ProductDetailsDTO?> GetProductByIdAsync(int id)

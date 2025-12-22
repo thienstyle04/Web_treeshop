@@ -1,18 +1,27 @@
 ﻿using backend1.Models.DTO;
 using backend1.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend1.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class OrdersController : ControllerBase
     {
         private readonly IOrderRepository _repo;
         public OrdersController(IOrderRepository repo) { _repo = repo; }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll() => Ok(await _repo.GetAllOrdersAsync());
+        public async Task<IActionResult> GetAll(
+            [FromQuery] string? filterOn, 
+            [FromQuery] string? filterQuery,
+            [FromQuery] string? sortBy, 
+            [FromQuery] bool isAscending = true,
+            [FromQuery] int pageNumber = 1, 
+            [FromQuery] int pageSize = 1000) 
+            => Ok(await _repo.GetAllOrdersAsync());
 
         [HttpGet("user/{userId:int}")]
         public async Task<IActionResult> GetByUser(int userId) => Ok(await _repo.GetOrdersByUserIdAsync(userId));

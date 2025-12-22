@@ -10,16 +10,42 @@ namespace backend1.Repositories
         private readonly AppDbContext _dbContext;
         public SQLCategoryRepository(AppDbContext dbContext) { _dbContext = dbContext; }
 
-        public async Task<List<CategoryDTO>> GetAllCategoriesAsync()
+        public async Task<List<CategoryDTO>> GetAllCategoriesAsync(
+        string? query = null,
+        string? sortBy = null,
+        string? sortDirection = "asc",
+        int pageNumber = 1,
+        int pageSize = 100)
         {
-            var categories = await _dbContext.Categories.ToListAsync();
-            return categories.Select(c => new CategoryDTO
+            //  Khởi tạo Query
+            var categories = _dbContext.Categories.AsQueryable();
+
+            //  Filter (Tìm kiếm theo tên)
+            if (!string.IsNullOrWhiteSpace(query))
             {
-                Id = c.Id,
-                Name = c.Name,
-                UrlHandler = c.UrlHandler,
-                Description = c.Description
-            }).ToList();
+                categories = categories.Where(x => x.Name.Contains(query));
+            }
+
+            //  Sorting (Sắp xếp)
+            if (!string.IsNullOrWhiteSpace(sortBy))
+            {
+                if (sortBy.Equals("Name", StringComparison.OrdinalIgnoreCase))
+                {
+                    categories = sortDirection == "asc"
+                        ? categories.OrderBy(x => x.Name)
+                        : categories.OrderByDescending(x => x.Name);
+                }
+            }
+
+            //  Pagination (Phân trang)
+            var skipResults = (pageNumber - 1) * pageSize;
+
+            //  Execute & Map to DTO
+            return await categories
+                .Skip(skipResults)
+                .Take(pageSize)
+                .Select(x => new CategoryDTO { Id = x.Id, Name = x.Name }) 
+                .ToListAsync();
         }
 
         public async Task<CategoryDTO?> GetCategoryByIdAsync(int id)
