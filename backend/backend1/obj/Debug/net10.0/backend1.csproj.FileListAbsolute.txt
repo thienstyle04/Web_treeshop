@@ -339,7 +339,6 @@ D:\folder\Program\doanAngular\Web_treeshop\backend\backend1\obj\Debug\net10.0\st
 D:\folder\Program\doanAngular\Web_treeshop\backend\backend1\obj\Debug\net10.0\staticwebassets.development.json
 D:\folder\Program\doanAngular\Web_treeshop\backend\backend1\obj\Debug\net10.0\staticwebassets.build.endpoints.json
 D:\folder\Program\doanAngular\Web_treeshop\backend\backend1\obj\Debug\net10.0\swae.build.ex.cache
-D:\folder\Program\doanAngular\Web_treeshop\backend\backend1\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt
 D:\folder\Program\doanAngular\Web_treeshop\backend\backend1\obj\Debug\net10.0\backend1.csproj.Up2Date
 D:\folder\Program\doanAngular\Web_treeshop\backend\backend1\obj\Debug\net10.0\backend1.dll
 D:\folder\Program\doanAngular\Web_treeshop\backend\backend1\obj\Debug\net10.0\refint\backend1.dll
@@ -347,3 +346,7 @@ D:\folder\Program\doanAngular\Web_treeshop\backend\backend1\obj\Debug\net10.0\ba
 D:\folder\Program\doanAngular\Web_treeshop\backend\backend1\obj\Debug\net10.0\backend1.pdb
 D:\folder\Program\doanAngular\Web_treeshop\backend\backend1\obj\Debug\net10.0\backend1.genruntimeconfig.cache
 D:\folder\Program\doanAngular\Web_treeshop\backend\backend1\obj\Debug\net10.0\ref\backend1.dll
+D:\folder\Program\doanAngular\Web_treeshop\backend\backend1\bin\Debug\net10.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\folder\Program\doanAngular\Web_treeshop\backend\backend1\bin\Debug\net10.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+D:\folder\Program\doanAngular\Web_treeshop\backend\backend1\bin\Debug\net10.0\BCrypt.Net-Next.dll
+D:\folder\Program\doanAngular\Web_treeshop\backend\backend1\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt

@@ -1,7 +1,10 @@
 using backend1.Data;
 using backend1.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,8 +44,39 @@ builder.Services.AddScoped<IShippingAddressRepository, SQLShippingAddressReposit
 builder.Services.AddScoped<ICategoryRepository, SQLCategoryRepository>();
 builder.Services.AddScoped<IOrderRepository, SQLOrderRepository>();
 builder.Services.AddScoped<IOrderItemRepository, SQLOrderItemRepository>();
+builder.Services.AddScoped<IAuthRepository, SQLAuthRepository>();
+// Cấu hình JWT Authentication
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(option =>
+option.TokenValidationParameters = new TokenValidationParameters
+{
+    ValidateIssuer = true,
+    ValidateAudience = true,
+    ValidateLifetime = true,
+    ValidateIssuerSigningKey = true,
+    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+    ValidAudience = builder.Configuration["Jwt:Audience"],
+    ClockSkew = TimeSpan.Zero,
+    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+});
+// Đăng ký DbContext cho Authentication và Identity
+builder.Services.AddDbContext<LoginAuthDbContext>(options =>
+options.UseSqlServer(builder.Configuration.GetConnectionString("LoginAuthConnection")));
+
+// Cấu hình CORS cho phép frontend gọi API
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 
 var app = builder.Build();
+
+// Sử dụng CORS
+app.UseCors("AllowAll");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -58,6 +92,8 @@ app.UseHttpsRedirection();
 
 // Cho phép truy cập ảnh trong thư mục wwwroot
 app.UseStaticFiles();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

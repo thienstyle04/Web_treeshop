@@ -39,7 +39,7 @@ namespace backend1.Repositories
                 Directory.CreateDirectory(imagesFolderPath);
             }
 
-            var localFilePath = Path.Combine(imagesFolderPath, $"{request.FileName}{Path.GetExtension(file.FileName)}");
+            var localFilePath = Path.Combine(imagesFolderPath, $"{request.FileName}{Path.GetExtension(file?.FileName)}");
 
             // Upload file to local folder
             using var stream = new FileStream(localFilePath, FileMode.Create);

@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using backend1.Models.DTO;
 using backend1.Repositories;
-using backend1.Models.Domain; // Dùng cho Delete
+using backend1.Models.Domain;
+using Microsoft.AspNetCore.Authorization; // Dùng cho Delete
 
 namespace backend1.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProductsController : ControllerBase
     {
         // 1. Khai báo private field cho IProductRepository
@@ -19,7 +21,12 @@ namespace backend1.Controllers
         }
 
         [HttpGet("get-all-products")]
-        public async Task<IActionResult> GetAllProducts()
+        public async Task<IActionResult> GetAllProducts(
+            [FromQuery] string? filterOn,
+            [FromQuery] string? filterQuery,
+            [FromQuery] string? sortBy,
+            [FromQuery] bool isAscending = true,
+            [FromQuery] int pageNumber = 1000)
         {
             var allProductsDTO = await _productRepository.GetAllProductsAsync(); 
 

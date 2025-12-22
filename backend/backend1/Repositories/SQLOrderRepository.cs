@@ -10,14 +10,59 @@ namespace backend1.Repositories
         private readonly AppDbContext _dbContext;
         public SQLOrderRepository(AppDbContext dbContext) { _dbContext = dbContext; }
 
-        public async Task<List<OrderDTO>> GetAllOrdersAsync()
+        public async Task<List<OrderDTO>> GetAllOrdersAsync(
+            string? filterOn = null, string? filterQuery = null,
+            string? sortBy = null, bool isAscending = true,
+            int pageNumber = 1, int pageSize = 1000)
         {
-            var orders = await _dbContext.Orders
-                .Include(o => o.ShippingAddress)
-                .Include(o => o.OrderItems).ThenInclude(oi => oi.Product)
-                .OrderByDescending(o => o.OrderDate)
+            var orders = _dbContext.Orders.AsQueryable();
+
+            // 1. Filter: Lọc theo Trạng thái (Status) hoặc UserID
+            if (!string.IsNullOrWhiteSpace(filterOn) && !string.IsNullOrWhiteSpace(filterQuery))
+            {
+                if (filterOn.Equals("Status", StringComparison.OrdinalIgnoreCase))
+                {
+                    // Giả sử Status là string hoặc enum chuyển sang string
+                    orders = orders.Where(x => x.OrderStatus.Contains(filterQuery));
+                }
+            }
+
+            // 2. Sort: Sắp xếp theo Ngày đặt hoặc Tổng tiền
+            if (!string.IsNullOrWhiteSpace(sortBy))
+            {
+                if (sortBy.Equals("OrderDate", StringComparison.OrdinalIgnoreCase))
+                {
+                    orders = isAscending ? orders.OrderBy(x => x.OrderDate) : orders.OrderByDescending(x => x.OrderDate);
+                }
+                else if (sortBy.Equals("TotalPrice", StringComparison.OrdinalIgnoreCase))
+                {
+                    orders = isAscending ? orders.OrderBy(x => x.TotalAmount) : orders.OrderByDescending(x => x.TotalAmount);
+                }
+            }
+
+            // 3. Pagination
+            var skipResults = (pageNumber - 1) * pageSize;
+
+            // Map sang DTO
+            return await orders
+                .Skip(skipResults)
+                .Take(pageSize)
+                .Select(order => new OrderDTO
+                {
+                    Id = order.Id,
+                    OrderDate = order.OrderDate,
+                    OrderStatus = order.OrderStatus,
+                    TotalAmount = order.TotalAmount,
+                    OrderItems = order.OrderItems.Select(oi => new OrderDetailItemDTO
+                    {
+                        ProductId = oi.ProductId,
+                        ProductName = oi.Product != null ? oi.Product.Name : "Unknown",
+                        Quantity = oi.Quantity,
+                        Price = oi.UnitPrice
+                    }).ToList()
+                    // Map thêm các trường khác nếu cần
+                })
                 .ToListAsync();
-            return MapToDTO(orders);
         }
 
         public async Task<List<OrderDTO>> GetOrdersByUserIdAsync(int userId)

@@ -1,18 +1,25 @@
 ﻿using backend1.Models.DTO;
 using backend1.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend1.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryRepository _repo;
         public CategoriesController(ICategoryRepository repo) { _repo = repo; }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll() => Ok(await _repo.GetAllCategoriesAsync());
+        public async Task<IActionResult> GetAll(
+            [FromQuery] string? query,
+            [FromQuery] string? sortBy,
+            [FromQuery] string? sortDirection,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 100) => Ok(await _repo.GetAllCategoriesAsync());
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
