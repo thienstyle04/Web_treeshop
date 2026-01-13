@@ -1,0 +1,101 @@
+<div class="profile-page">
+    <div class="profile-container">
+        <a routerLink="/" class="back-btn">
+            ← Về trang chủ
+        </a>
+
+        <div class="profile-header">
+            <div class="avatar">
+                <span>{{ getInitials() }}</span>
+            </div>
+            <h1>Thông tin tài khoản</h1>
+            <p>Quản lý thông tin cá nhân của bạn</p>
+        </div>
+
+        @if (successMessage()) {
+        <div class="success-message">
+            ✓ {{ successMessage() }}
+        </div>
+        }
+
+        @if (errorMessage()) {
+        <div class="error-message">
+            {{ errorMessage() }}
+        </div>
+        }
+
+        <form class="profile-form" (ngSubmit)="saveProfile()">
+            <div class="form-group">
+                <label for="username">Tên đăng nhập</label>
+                <input type="text" id="username" [(ngModel)]="formData.name" name="name" disabled class="disabled">
+                <small>Tên đăng nhập không thể thay đổi</small>
+            </div>
+
+            <div class="form-group">
+                <label for="fullName">Họ và tên</label>
+                <input type="text" id="fullName" [(ngModel)]="formData.fullName" name="fullName"
+                    placeholder="Nhập họ và tên">
+            </div>
+
+            <div class="form-group">
+                <label for="description">Giới thiệu</label>
+                <textarea id="description" [(ngModel)]="formData.description" name="description" rows="3"
+                    placeholder="Viết vài dòng về bản thân..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Vai trò</label>
+                <div class="role-badge" [class]="formData.role?.toLowerCase()">
+                    {{ formData.role === 'Admin' ? 'Quản trị viên' : 'Khách hàng' }}
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="save-btn" [disabled]="saving()">
+                    @if (saving()) {
+                    <span class="spinner"></span> Đang lưu...
+                    } @else {
+                    Lưu thay đổi
+                    }
+                </button>
+            </div>
+        </form>
+
+        <div class="profile-section">
+            <h2>Bảo mật</h2>
+            <button class="secondary-btn" (click)="showPasswordModal = true">
+                Đổi mật khẩu
+            </button>
+        </div>
+    </div>
+
+    <!-- Password Modal -->
+    @if (showPasswordModal) {
+    <div class="modal-overlay" (click)="showPasswordModal = false">
+        <div class="modal" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h2>Đổi mật khẩu</h2>
+                <button class="close-btn" (click)="showPasswordModal = false">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Mật khẩu hiện tại</label>
+                    <input type="password" [(ngModel)]="passwordData.currentPassword">
+                </div>
+                <div class="form-group">
+                    <label>Mật khẩu mới</label>
+                    <input type="password" [(ngModel)]="passwordData.newPassword">
+                </div>
+                <div class="form-group">
+                    <label>Xác nhận mật khẩu mới</label>
+                    <input type="password" [(ngModel)]="passwordData.confirmPassword">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="secondary-btn" (click)="showPasswordModal = false">Hủy</button>
+                <button class="save-btn" (click)="changePassword()">Đổi mật khẩu</button>
+            </div>
+        </div>
+    </div>
+    }
+</div>

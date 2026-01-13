@@ -1,0 +1,106 @@
+<div class="orders-page">
+    <div class="orders-container">
+        <a routerLink="/" class="back-btn">
+            ← Về trang chủ
+        </a>
+
+        <div class="page-header">
+            <div class="header-content">
+                <h1>Đơn hàng của tôi</h1>
+                <p>Theo dõi trạng thái các đơn hàng của bạn</p>
+            </div>
+            <button class="refresh-btn" (click)="loadOrders()" title="Làm mới">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="23 4 23 10 17 10"></polyline>
+                    <polyline points="1 20 1 14 7 14"></polyline>
+                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                </svg>
+                Làm mới
+            </button>
+        </div>
+
+        @if (loading()) {
+        <div class="loading">
+            <div class="spinner"></div>
+            <p>Đang tải đơn hàng...</p>
+        </div>
+        } @else if (orders().length === 0) {
+        <div class="empty-state">
+            <div class="empty-icon">📦</div>
+            <h2>Chưa có đơn hàng nào</h2>
+            <p>Bạn chưa có đơn hàng nào. Hãy mua sắm ngay!</p>
+            <a routerLink="/products" class="shop-btn">Mua sắm ngay</a>
+        </div>
+        } @else {
+        <div class="orders-list">
+            @for (order of orders(); track order.id) {
+            <div class="order-card">
+                <div class="order-header">
+                    <div class="order-info">
+                        <span class="order-id">Đơn hàng #{{ order.id }}</span>
+                        <span class="order-date">{{ order.orderDate | date:'dd/MM/yyyy HH:mm' }}</span>
+                    </div>
+                    <div class="order-status" [class]="order.orderStatus.toLowerCase()">
+                        <span class="status-dot"></span>
+                        {{ getStatusLabel(order.orderStatus) }}
+                    </div>
+                </div>
+
+                <div class="order-progress">
+                    <div class="progress-step" [class.active]="isStepActive(order.orderStatus, 'pending')"
+                        [class.done]="isStepDone(order.orderStatus, 'pending')">
+                        <div class="step-icon">📝</div>
+                        <span>Chờ xử lý</span>
+                    </div>
+                    <div class="progress-line" [class.active]="isStepDone(order.orderStatus, 'pending')"></div>
+                    <div class="progress-step" [class.active]="isStepActive(order.orderStatus, 'processing')"
+                        [class.done]="isStepDone(order.orderStatus, 'processing')">
+                        <div class="step-icon">📦</div>
+                        <span>Đang xử lý</span>
+                    </div>
+                    <div class="progress-line" [class.active]="isStepDone(order.orderStatus, 'processing')"></div>
+                    <div class="progress-step" [class.active]="isStepActive(order.orderStatus, 'shipped')"
+                        [class.done]="isStepDone(order.orderStatus, 'shipped')">
+                        <div class="step-icon">🚚</div>
+                        <span>Đang giao</span>
+                    </div>
+                    <div class="progress-line" [class.active]="isStepDone(order.orderStatus, 'shipped')"></div>
+                    <div class="progress-step" [class.active]="isStepActive(order.orderStatus, 'delivered')"
+                        [class.done]="isStepDone(order.orderStatus, 'delivered')">
+                        <div class="step-icon">✅</div>
+                        <span>Đã giao</span>
+                    </div>
+                </div>
+
+                @if (order.orderStatus === 'Cancelled') {
+                <div class="cancelled-notice">
+                    ❌ Đơn hàng đã bị hủy
+                </div>
+                }
+
+                <div class="order-items">
+                    @for (item of order.orderItems; track item.productId) {
+                    <div class="order-item">
+                        <span class="item-name">{{ item.productName }}</span>
+                        <span class="item-qty">x{{ item.quantity }}</span>
+                        <span class="item-price">{{ item.price | number:'1.0-0' }}đ</span>
+                    </div>
+                    }
+                </div>
+
+                <div class="order-footer">
+                    <div class="order-total">
+                        <span>Tổng tiền:</span>
+                        <span class="total-amount">{{ order.totalAmount | number:'1.0-0' }}đ</span>
+                    </div>
+                    <button class="detail-btn" (click)="toggleDetails(order.id)">
+                        Chi tiết
+                    </button>
+                </div>
+            </div>
+            }
+        </div>
+        }
+    </div>
+</div>

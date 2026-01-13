@@ -1,0 +1,78 @@
+<div class="auth-page">
+    <div class="auth-container">
+        <div class="auth-header">
+            <a routerLink="/" class="logo">
+                <span class="logo-icon">🌿</span>
+                <span class="logo-text">TreeShop</span>
+            </a>
+            <h1>Đăng ký tài khoản</h1>
+            <p>Tạo tài khoản để trải nghiệm mua sắm tốt hơn</p>
+        </div>
+
+        <form class="auth-form" (ngSubmit)="onSubmit()">
+            @if (error()) {
+            <div class="error-message">
+                {{ error() }}
+            </div>
+            }
+
+            @if (success()) {
+            <div class="success-message">
+                {{ success() }}
+            </div>
+            }
+
+            <div class="form-group">
+                <label for="fullName">Họ và tên</label>
+                <input type="text" id="fullName" [(ngModel)]="fullName" name="fullName" placeholder="Nhập họ và tên"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" [(ngModel)]="email" name="email" placeholder="Nhập email của bạn"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Số điện thoại</label>
+                <input type="tel" id="phone" [(ngModel)]="phone" name="phone" placeholder="Nhập số điện thoại">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Mật khẩu</label>
+                <div class="password-input">
+                    <input [type]="showPassword ? 'text' : 'password'" id="password" [(ngModel)]="password"
+                        name="password" placeholder="Tối thiểu 6 ký tự" required>
+                    <button type="button" class="toggle-password" (click)="showPassword = !showPassword">
+                        {{ showPassword ? '👁️' : '🙈' }}
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Xác nhận mật khẩu</label>
+                <input type="password" id="confirmPassword" [(ngModel)]="confirmPassword" name="confirmPassword"
+                    placeholder="Nhập lại mật khẩu" required>
+            </div>
+
+            <label class="checkbox-label terms">
+                <input type="checkbox" [(ngModel)]="agreeTerms" name="agreeTerms">
+                <span>Tôi đồng ý với <a href="#">điều khoản dịch vụ</a> và <a href="#">chính sách bảo mật</a></span>
+            </label>
+
+            <button type="submit" class="submit-btn" [disabled]="loading()">
+                @if (loading()) {
+                <span class="spinner"></span>
+                Đang đăng ký...
+                } @else {
+                Đăng ký
+                }
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Đã có tài khoản? <a routerLink="/login">Đăng nhập</a></p>
+        </div>
+    </div>
+</div>

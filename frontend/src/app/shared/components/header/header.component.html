@@ -1,0 +1,87 @@
+<header class="header">
+    <div class="header-container">
+        <!-- Logo -->
+        <a routerLink="/" class="logo">
+            <span class="logo-icon">🌿</span>
+            <span class="logo-text">TreeShop</span>
+        </a>
+
+        <!-- Navigation -->
+        <nav class="nav-menu">
+            <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Trang chủ</a>
+            <a routerLink="/products" routerLinkActive="active">Sản phẩm</a>
+            <a routerLink="/about" routerLinkActive="active">Về chúng tôi</a>
+        </nav>
+
+        <!-- Actions -->
+        <div class="header-actions">
+            <!-- Search -->
+            <button class="icon-btn search-btn" (click)="toggleSearch()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </button>
+
+            <!-- Cart -->
+            <a routerLink="/cart" class="icon-btn cart-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="m1 1 4 4 15.2 1.9a1 1 0 0 1 .8 1l-1.5 6.8a1 1 0 0 1-1 .8H7.8"></path>
+                </svg>
+                @if (cartService.cartCount() > 0) {
+                <span class="cart-badge">{{ cartService.cartCount() }}</span>
+                }
+            </a>
+
+            <!-- User Menu -->
+            @if (authService.isLoggedIn()) {
+            <div class="user-menu">
+                <button class="user-btn" (click)="toggleUserMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </button>
+                @if (showUserMenu) {
+                <div class="user-dropdown">
+                    <a routerLink="/profile">Tài khoản</a>
+                    <a routerLink="/orders">Đơn hàng</a>
+                    <button (click)="logout()">Đăng xuất</button>
+                </div>
+                }
+            </div>
+            } @else {
+            <a routerLink="/login" class="login-btn">Đăng nhập</a>
+            }
+
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-btn" (click)="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Search Bar (expandable) -->
+    @if (showSearch) {
+    <div class="search-bar">
+        <input type="text" placeholder="Tìm kiếm cây cảnh..." #searchInput>
+        <button (click)="search(searchInput.value)">Tìm</button>
+    </div>
+    }
+
+    <!-- Mobile Menu -->
+    @if (showMobileMenu) {
+    <nav class="mobile-nav">
+        <a routerLink="/" (click)="closeMobileMenu()">Trang chủ</a>
+        <a routerLink="/products" (click)="closeMobileMenu()">Sản phẩm</a>
+        <a routerLink="/about" (click)="closeMobileMenu()">Về chúng tôi</a>
+    </nav>
+    }
+</header>

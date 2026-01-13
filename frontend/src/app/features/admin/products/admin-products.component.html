@@ -1,0 +1,175 @@
+<div class="admin-products">
+    <div class="page-header">
+        <h1>Quản lý sản phẩm</h1>
+        <button class="btn-primary" (click)="showAddModal = true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Thêm sản phẩm
+        </button>
+    </div>
+
+    <!-- Search & Filter -->
+    <div class="filters">
+        <div class="search-box">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" placeholder="Tìm kiếm sản phẩm..." [(ngModel)]="searchTerm" (input)="filterProducts()">
+        </div>
+        <select [(ngModel)]="selectedCategoryId" (change)="filterProducts()">
+            <option [value]="null">Tất cả danh mục</option>
+            @for (category of categories(); track category.id) {
+            <option [value]="category.id">{{ category.name }}</option>
+            }
+        </select>
+    </div>
+
+    <!-- Products Table -->
+    <div class="table-container">
+        @if (loading()) {
+        <div class="loading">Đang tải...</div>
+        } @else {
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Hình ảnh</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Danh mục</th>
+                    <th>Giá</th>
+                    <th>Tồn kho</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (product of filteredProducts(); track product.id) {
+                <tr>
+                    <td>#{{ product.id }}</td>
+                    <td>
+                        <img [src]="product.imageUrls?.[0] || 'assets/images/placeholder-plant.jpg'"
+                            [alt]="product.name" class="product-thumb">
+                    </td>
+                    <td>
+                        <div class="product-name">{{ product.name }}</div>
+                        <div class="product-desc">{{ product.scientificName }}</div>
+                    </td>
+                    <td>
+                        <span class="category-tag">{{ product.categoryName || 'N/A' }}</span>
+                    </td>
+                    <td class="price">{{ product.price | number:'1.0-0' }}đ</td>
+                    <td>
+                        <span class="stock" [class.low]="product.stockQuantity < 10">
+                            {{ product.stockQuantity }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="actions">
+                            <button class="btn-icon edit" title="Sửa" (click)="editProduct(product)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                </svg>
+                            </button>
+                            <button class="btn-icon delete" title="Xóa" (click)="confirmDelete(product)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path
+                                        d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                                    </path>
+                                </svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                } @empty {
+                <tr>
+                    <td colspan="7" class="empty">Không có sản phẩm nào</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+        }
+    </div>
+
+    <!-- Add/Edit Modal -->
+    @if (showAddModal || showEditModal) {
+    <div class="modal-overlay" (click)="closeModal()">
+        <div class="modal" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h2>{{ showEditModal ? 'Sửa sản phẩm' : 'Thêm sản phẩm mới' }}</h2>
+                <button class="close-btn" (click)="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Tên sản phẩm *</label>
+                    <input type="text" [(ngModel)]="formData.name" required>
+                </div>
+                <div class="form-group">
+                    <label>Tên khoa học</label>
+                    <input type="text" [(ngModel)]="formData.scientificName">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Giá (VNĐ) *</label>
+                        <input type="number" [(ngModel)]="formData.price" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tồn kho *</label>
+                        <input type="number" [(ngModel)]="formData.stockQuantity" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Danh mục *</label>
+                    <select [(ngModel)]="formData.categoryId" required>
+                        <option [value]="null" disabled>Chọn danh mục</option>
+                        @for (category of categories(); track category.id) {
+                        <option [value]="category.id">{{ category.name }}</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Mô tả</label>
+                    <textarea [(ngModel)]="formData.description" rows="4"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" (click)="closeModal()">Hủy</button>
+                <button class="btn-primary" (click)="saveProduct()" [disabled]="saving()">
+                    {{ saving() ? 'Đang lưu...' : (showEditModal ? 'Cập nhật' : 'Thêm') }}
+                </button>
+            </div>
+        </div>
+    </div>
+    }
+
+    <!-- Delete Confirmation -->
+    @if (showDeleteModal) {
+    <div class="modal-overlay" (click)="showDeleteModal = false">
+        <div class="modal delete-modal" (click)="$event.stopPropagation()">
+            <div class="modal-body">
+                <div class="delete-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                    </svg>
+                </div>
+                <h3>Xác nhận xóa</h3>
+                <p>Bạn có chắc muốn xóa sản phẩm "{{ productToDelete?.name }}"?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" (click)="showDeleteModal = false">Hủy</button>
+                <button class="btn-danger" (click)="deleteProduct()">Xóa</button>
+            </div>
+        </div>
+    </div>
+    }
+</div>
