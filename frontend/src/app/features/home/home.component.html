@@ -1,0 +1,110 @@
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">
+            <span class="highlight">Cây Cảnh</span> Cho Không Gian Xanh
+        </h1>
+        <p class="hero-subtitle">
+            Khám phá bộ sưu tập cây cảnh đa dạng, chất lượng cao.
+            Mang thiên nhiên vào ngôi nhà của bạn.
+        </p>
+        <div class="hero-actions">
+            <a routerLink="/products" class="btn-primary">Xem sản phẩm</a>
+            <a routerLink="/categories" class="btn-secondary">Danh mục</a>
+        </div>
+    </div>
+    <div class="hero-image">
+        <div class="hero-plant">
+            <span class="plant-emoji">🌿</span>
+        </div>
+        <div class="floating-elements">
+            <span class="float-1">🌱</span>
+            <span class="float-2">🌸</span>
+            <span class="float-3">🍃</span>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features">
+    <div class="features-container">
+        <div class="feature-item">
+            <div class="feature-icon">🚚</div>
+            <h3>Giao hàng toàn quốc</h3>
+            <p>Miễn phí với đơn từ 500k</p>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon">🌱</div>
+            <h3>Cây khỏe mạnh</h3>
+            <p>Cam kết chất lượng</p>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon">💬</div>
+            <h3>Tư vấn miễn phí</h3>
+            <p>Hỗ trợ 24/7</p>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon">🔄</div>
+            <h3>Đổi trả 7 ngày</h3>
+            <p>Hoàn tiền 100%</p>
+        </div>
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section class="categories-section">
+    <div class="section-header">
+        <h2>Danh mục phổ biến</h2>
+        <a routerLink="/categories" class="view-all">Xem tất cả →</a>
+    </div>
+    <div class="categories-grid">
+        @for (category of categories(); track category.id) {
+        <a [routerLink]="['/products']" [queryParams]="{category: category.id}" class="category-card">
+            <div class="category-icon">🌿</div>
+            <h3>{{ category.name }}</h3>
+            <p>{{ category.description || 'Xem sản phẩm' }}</p>
+        </a>
+        }
+        @if (categoriesLoading()) {
+        @for (i of [1,2,3,4]; track i) {
+        <div class="category-card skeleton"></div>
+        }
+        }
+    </div>
+</section>
+
+<!-- Featured Products -->
+<section class="products-section">
+    <div class="section-header">
+        <h2>Sản phẩm nổi bật</h2>
+        <a routerLink="/products" class="view-all">Xem tất cả →</a>
+    </div>
+    <div class="products-grid">
+        @for (product of featuredProducts(); track product.id) {
+        <app-product-card [product]="product"></app-product-card>
+        }
+        @if (productsLoading()) {
+        @for (i of [1,2,3,4,5,6,7,8]; track i) {
+        <div class="product-skeleton">
+            <div class="skeleton-image"></div>
+            <div class="skeleton-content">
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text short"></div>
+            </div>
+        </div>
+        }
+        }
+    </div>
+</section>
+
+<!-- Newsletter Section -->
+<section class="newsletter">
+    <div class="newsletter-content">
+        <h2>Đăng ký nhận tin</h2>
+        <p>Nhận thông tin khuyến mãi và mẹo chăm sóc cây</p>
+        <form class="newsletter-form" (submit)="subscribeNewsletter($event)">
+            <input type="email" placeholder="Nhập email của bạn" required>
+            <button type="submit">Đăng ký</button>
+        </form>
+    </div>
+</section>

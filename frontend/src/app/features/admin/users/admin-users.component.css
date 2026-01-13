@@ -1,0 +1,137 @@
+.admin-users {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.page-header h1 {
+    font-size: 1.5rem;
+    color: #1a472a;
+    margin: 0;
+}
+
+.stats {
+    display: flex;
+    gap: 1rem;
+}
+
+.stat {
+    background: white;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.stat.admin {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.stat.customer {
+    background: #e8f5e9;
+    color: #1a472a;
+}
+
+/* Table */
+.table-container {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.data-table th {
+    color: #888;
+    font-weight: 500;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    background: #fafafa;
+}
+
+.data-table tr:hover {
+    background: #fafafa;
+}
+
+.username {
+    font-weight: 600;
+    color: #1a472a;
+}
+
+.description {
+    color: #888;
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.role-badge {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.role-badge.admin {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.role-badge.customer {
+    background: #e8f5e9;
+    color: #1a472a;
+}
+
+.actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.role-select {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.role-select:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.empty,
+.loading {
+    text-align: center;
+    color: #888;
+    padding: 3rem !important;
+}

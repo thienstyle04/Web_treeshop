@@ -1,0 +1,58 @@
+<div class="admin-users">
+    <div class="page-header">
+        <h1>Quản lý người dùng</h1>
+        <div class="stats">
+            <span class="stat">Tổng: {{ users().length }}</span>
+            <span class="stat admin">Admin: {{ adminCount() }}</span>
+            <span class="stat customer">Khách hàng: {{ customerCount() }}</span>
+        </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="table-container">
+        @if (loading()) {
+        <div class="loading">Đang tải...</div>
+        } @else {
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tên đăng nhập</th>
+                    <th>Họ tên</th>
+                    <th>Mô tả</th>
+                    <th>Vai trò</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (user of users(); track user.id) {
+                <tr>
+                    <td>#{{ user.id }}</td>
+                    <td class="username">{{ user.name }}</td>
+                    <td>{{ user.fullName }}</td>
+                    <td class="description">{{ user.description || '-' }}</td>
+                    <td>
+                        <span class="role-badge" [class]="user.role.toLowerCase()">
+                            {{ user.role }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="actions">
+                            <select class="role-select" [(ngModel)]="user.role" (change)="updateRole(user)"
+                                [disabled]="user.name === 'admin'">
+                                <option value="Customer">Customer</option>
+                                <option value="Admin">Admin</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                } @empty {
+                <tr>
+                    <td colspan="6" class="empty">Không có người dùng nào</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+        }
+    </div>
+</div>

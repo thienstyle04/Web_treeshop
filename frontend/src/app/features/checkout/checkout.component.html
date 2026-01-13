@@ -1,0 +1,153 @@
+<div class="checkout-page">
+    <div class="page-header">
+        <h1>Thanh toán</h1>
+    </div>
+
+    <div class="checkout-container">
+        <a routerLink="/cart" class="back-btn">← Quay lại giỏ hàng</a>
+
+        <div class="checkout-content">
+            <!-- Shipping Form -->
+            <div class="shipping-section">
+                <h2>Thông tin giao hàng</h2>
+
+                <form class="shipping-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fullName">Họ và tên *</label>
+                            <input type="text" id="fullName" [(ngModel)]="shippingInfo.fullName" name="fullName"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Số điện thoại *</label>
+                            <input type="tel" id="phone" [(ngModel)]="shippingInfo.phone" name="phone"
+                                placeholder="0xxxxxxxxx" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">Địa chỉ *</label>
+                        <input type="text" id="address" [(ngModel)]="shippingInfo.address" name="address"
+                            placeholder="Số nhà, tên đường" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="city">Tỉnh/Thành phố *</label>
+                            <select id="city" [(ngModel)]="selectedProvinceCode" name="city"
+                                (change)="onProvinceChange()" required>
+                                <option value="">-- Chọn Tỉnh/Thành phố --</option>
+                                @for (province of provinces(); track province.code) {
+                                <option [value]="province.code">{{ province.name }}</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="district">Quận/Huyện *</label>
+                            <select id="district" [(ngModel)]="selectedDistrictCode" name="district"
+                                (change)="onDistrictChange()" required [disabled]="!selectedProvinceCode">
+                                <option value="">-- Chọn Quận/Huyện --</option>
+                                @for (district of districts(); track district.code) {
+                                <option [value]="district.code">{{ district.name }}</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="ward">Phường/Xã</label>
+                            <select id="ward" [(ngModel)]="selectedWardCode" name="ward"
+                                [disabled]="!selectedDistrictCode">
+                                <option value="">-- Chọn Phường/Xã --</option>
+                                @for (ward of wards(); track ward.code) {
+                                <option [value]="ward.code">{{ ward.name }}</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="note">Ghi chú</label>
+                        <textarea id="note" [(ngModel)]="shippingInfo.note" name="note" rows="3"
+                            placeholder="Ghi chú cho người giao hàng..."></textarea>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="order-summary">
+                <h2>Đơn hàng của bạn</h2>
+
+                <div class="order-items">
+                    @for (item of cartService.cartItems(); track item.id) {
+                    <div class="order-item">
+                        <div class="item-image">
+                            @if (item.imageUrl) {
+                            <img [src]="item.imageUrl" [alt]="item.productName">
+                            } @else {
+                            <img src="assets/images/placeholder-plant.jpg" [alt]="item.productName">
+                            }
+                            <span class="item-quantity">{{ item.quantity }}</span>
+                        </div>
+                        <div class="item-info">
+                            <span class="item-name">{{ item.productName }}</span>
+                            <span class="item-price">{{ item.price * item.quantity | number:'1.0-0' }}đ</span>
+                        </div>
+                    </div>
+                    }
+                </div>
+
+                <div class="order-totals">
+                    <div class="total-row">
+                        <span>Tạm tính</span>
+                        <span>{{ cartService.cartTotal() | number:'1.0-0' }}đ</span>
+                    </div>
+                    <div class="total-row">
+                        <span>Phí vận chuyển</span>
+                        <span>{{ shippingFee | number:'1.0-0' }}đ</span>
+                    </div>
+                    @if (cartService.cartTotal() >= 500000) {
+                    <div class="total-row discount">
+                        <span>Miễn phí vận chuyển</span>
+                        <span>-{{ shippingFee | number:'1.0-0' }}đ</span>
+                    </div>
+                    }
+                    <div class="total-row final">
+                        <span>Tổng cộng</span>
+                        <span>{{ finalTotal | number:'1.0-0' }}đ</span>
+                    </div>
+                </div>
+
+                @if (errorMessage()) {
+                <div class="error-message">{{ errorMessage() }}</div>
+                }
+
+                <button class="place-order-btn" (click)="placeOrder()" [disabled]="orderPlacing()">
+                    @if (orderPlacing()) {
+                    <span class="spinner"></span> Đang xử lý...
+                    } @else {
+                    Thanh toán
+                    }
+                </button>
+
+                <p class="terms-note">
+                    Bằng việc đặt hàng, bạn đồng ý với <a href="#">Điều khoản dịch vụ</a> của chúng tôi.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Success Modal -->
+    @if (orderSuccess()) {
+    <div class="modal-overlay">
+        <div class="success-modal">
+            <div class="success-icon">✓</div>
+            <h2>Đặt hàng thành công!</h2>
+            <p>Cảm ơn bạn đã đặt hàng. Chúng tôi sẽ liên hệ xác nhận đơn hàng sớm nhất.</p>
+            <p class="order-id">Mã đơn hàng: <strong>#{{ orderId }}</strong></p>
+            <div class="modal-actions">
+                <a routerLink="/orders" class="view-orders-btn">Xem đơn hàng</a>
+                <a routerLink="/" class="home-btn">Về trang chủ</a>
+            </div>
+        </div>
+    </div>
+    }
+</div>

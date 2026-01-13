@@ -1,0 +1,333 @@
+.orders-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f0f7f1 0%, #e8f5e9 100%);
+    padding: 2rem;
+}
+
+.orders-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    color: #1a472a;
+    text-decoration: none;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    transition: opacity 0.2s ease;
+}
+
+.back-btn:hover {
+    opacity: 0.7;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.header-content {
+    text-align: left;
+}
+
+.page-header h1 {
+    color: #1a472a;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.page-header p {
+    color: #666;
+}
+
+.refresh-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    padding: 0.625rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    color: #1a472a;
+    transition: all 0.2s ease;
+}
+
+.refresh-btn:hover {
+    background: #e8f5e9;
+    border-color: #1a472a;
+}
+
+.loading {
+    text-align: center;
+    padding: 4rem;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #e8f5e9;
+    border-top-color: #1a472a;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.empty-state {
+    text-align: center;
+    padding: 4rem;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+}
+
+.empty-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.empty-state h2 {
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+    color: #666;
+    margin-bottom: 1.5rem;
+}
+
+.shop-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #1a472a, #2d5a3d);
+    color: white;
+    padding: 0.875rem 2rem;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.order-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+}
+
+.order-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.order-id {
+    font-weight: 600;
+    color: #1a472a;
+    font-size: 1.1rem;
+}
+
+.order-date {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+.order-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.order-status.pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.order-status.pending .status-dot {
+    background: #f59e0b;
+}
+
+.order-status.processing {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.order-status.processing .status-dot {
+    background: #3b82f6;
+}
+
+.order-status.shipped {
+    background: #e8f5e9;
+    color: #1a472a;
+}
+
+.order-status.shipped .status-dot {
+    background: #22c55e;
+}
+
+.order-status.delivered {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.order-status.delivered .status-dot {
+    background: #10b981;
+}
+
+.order-status.cancelled {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.order-status.cancelled .status-dot {
+    background: #dc2626;
+}
+
+/* Progress Steps */
+.order-progress {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    padding: 1rem 0;
+}
+
+.progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0.4;
+    transition: opacity 0.3s ease;
+}
+
+.progress-step.active,
+.progress-step.done {
+    opacity: 1;
+}
+
+.step-icon {
+    font-size: 1.5rem;
+}
+
+.progress-step span {
+    font-size: 0.75rem;
+    color: #666;
+}
+
+.progress-line {
+    flex: 1;
+    height: 3px;
+    background: #e0e0e0;
+    margin: 0 0.5rem;
+}
+
+.progress-line.active {
+    background: #22c55e;
+}
+
+.cancelled-notice {
+    background: #fee2e2;
+    color: #dc2626;
+    padding: 0.75rem;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.order-items {
+    border-top: 1px solid #f0f0f0;
+    padding-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.order-item {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0;
+}
+
+.item-name {
+    flex: 1;
+    color: #333;
+}
+
+.item-qty {
+    color: #888;
+    margin-right: 1rem;
+}
+
+.item-price {
+    font-weight: 500;
+    color: #1a472a;
+}
+
+.order-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 1rem;
+}
+
+.order-total {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.total-amount {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: #1a472a;
+}
+
+.detail-btn {
+    background: #f5f5f5;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.detail-btn:hover {
+    background: #eee;
+}
+
+@media (max-width: 576px) {
+    .order-progress {
+        display: none;
+    }
+}
