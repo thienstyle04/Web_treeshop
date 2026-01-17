@@ -7,6 +7,7 @@ namespace backend1.Repositories
     {
         Task<List<ReviewDTO>> GetReviewsByProductIdAsync(int productId);
         Task<Review> AddReviewAsync(AddReviewDTO addReviewDTO);
+        Task<Review?> UpdateReviewAsync(int id, AddReviewDTO request);
         Task<Review?> DeleteReviewAsync(int id);
     }
 }

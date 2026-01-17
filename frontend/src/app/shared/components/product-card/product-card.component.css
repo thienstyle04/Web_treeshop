@@ -134,3 +134,44 @@
     font-weight: 700;
     color: #1a472a;
 }
+
+.flash-sale-label {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #ef6c00;
+    color: white;
+    padding: 0.35rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(239, 108, 0, 0.3);
+    z-index: 2;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.price-container {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.original-price {
+    text-decoration: line-through;
+    color: #9e9e9e;
+    font-size: 0.9rem;
+}

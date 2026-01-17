@@ -26,6 +26,13 @@ namespace backend1.Controllers
             return Ok(review);
         }
 
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update(int id, [FromBody] AddReviewDTO request)
+        {
+            var review = await _reviewRepository.UpdateReviewAsync(id, request);
+            return review == null ? NotFound() : Ok(review);
+        }
+
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {

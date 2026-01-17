@@ -14,6 +14,7 @@ namespace backend1.Controllers
         public CategoriesController(ICategoryRepository repo) { _repo = repo; }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll(
             [FromQuery] string? query,
             [FromQuery] string? sortBy,
@@ -22,6 +23,7 @@ namespace backend1.Controllers
             [FromQuery] int pageSize = 100) => Ok(await _repo.GetAllCategoriesAsync());
 
         [HttpGet("{id:int}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetById(int id)
         {
             var result = await _repo.GetCategoryByIdAsync(id);

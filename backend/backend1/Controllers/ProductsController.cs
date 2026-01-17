@@ -21,6 +21,7 @@ namespace backend1.Controllers
         }
 
         [HttpGet("get-all-products")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllProducts(
             [FromQuery] string? filterOn,
             [FromQuery] string? filterQuery,
@@ -35,6 +36,7 @@ namespace backend1.Controllers
 
         [HttpGet]
         [Route("get-product-by-id/{id:int}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetProductById([FromRoute] int id)
         {
             var productDTO = await _productRepository.GetProductByIdAsync(id); 

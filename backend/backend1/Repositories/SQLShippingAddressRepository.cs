@@ -40,6 +40,30 @@ namespace backend1.Repositories
             return address;
         }
 
+        public async Task<ShippingAddress?> UpdateAddressAsync(int id, AddShippingAddressDTO request)
+        {
+            var address = await _dbContext.ShippingAddresses.FindAsync(id);
+            if (address == null) return null;
+
+            // Nếu set mặc định, bỏ mặc định cũ
+            if (request.IsDefault && !address.IsDefault)
+            {
+                var defaults = await _dbContext.ShippingAddresses
+                    .Where(a => a.UserId == request.UserId && a.IsDefault)
+                    .ToListAsync();
+                foreach (var d in defaults) d.IsDefault = false;
+            }
+
+            address.RecipientName = request.RecipientName;
+            address.StreetAddress = request.StreetAddress;
+            address.City = request.City;
+            address.Phone = request.Phone;
+            address.IsDefault = request.IsDefault;
+
+            await _dbContext.SaveChangesAsync();
+            return address;
+        }
+
         public async Task<ShippingAddress?> DeleteAddressAsync(int id)
         {
             var address = await _dbContext.ShippingAddresses.FindAsync(id);

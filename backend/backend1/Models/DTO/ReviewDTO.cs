@@ -8,5 +8,6 @@
         public DateTime ReviewDate { get; set; }
         public string? UserName { get; set; } // Hiển thị tên người review
         public int ProductId { get; set; }
+        public int UserId { get; set; }
     }
 }

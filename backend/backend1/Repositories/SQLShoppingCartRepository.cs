@@ -54,6 +54,24 @@ namespace backend1.Repositories
             return newItem;
         }
 
+        public async Task<ShoppingCartItem?> UpdateCartItemAsync(int cartItemId, int quantity)
+        {
+            var item = await _dbContext.ShoppingCartItems.FindAsync(cartItemId);
+            if (item == null) return null;
+
+            if (quantity <= 0)
+            {
+                _dbContext.ShoppingCartItems.Remove(item);
+            }
+            else
+            {
+                item.Quantity = quantity;
+            }
+
+            await _dbContext.SaveChangesAsync();
+            return item;
+        }
+
         public async Task<ShoppingCartItem?> RemoveFromCartAsync(int cartItemId)
         {
             var item = await _dbContext.ShoppingCartItems.FindAsync(cartItemId);

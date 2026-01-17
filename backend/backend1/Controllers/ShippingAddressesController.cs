@@ -23,6 +23,13 @@ namespace backend1.Controllers
             return Ok(addr);
         }
 
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update(int id, [FromBody] AddShippingAddressDTO request)
+        {
+            var addr = await _repo.UpdateAddressAsync(id, request);
+            return addr == null ? NotFound() : Ok(addr);
+        }
+
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {

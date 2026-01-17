@@ -9,6 +9,11 @@ export const routes: Routes = [
         title: 'TreeShop - Cây Cảnh Chất Lượng'
     },
     {
+        path: 'about',
+        loadComponent: () => import('./features/about/about.component').then(m => m.AboutComponent),
+        title: 'Về chúng tôi - TreeShop'
+    },
+    {
         path: 'products',
         loadComponent: () => import('./features/products/product-list.component').then(m => m.ProductListComponent),
         title: 'Sản phẩm - TreeShop'
@@ -92,6 +97,11 @@ export const routes: Routes = [
                 path: 'users',
                 loadComponent: () => import('./features/admin/users/admin-users.component').then(m => m.AdminUsersComponent),
                 title: 'Quản lý người dùng - Admin'
+            },
+            {
+                path: 'discounts',
+                loadComponent: () => import('./features/admin/discounts/admin-discounts.component').then(m => m.AdminDiscountsComponent),
+                title: 'Quản lý mã giảm giá - Admin'
             }
         ]
     },

@@ -95,6 +95,22 @@
                     }
                 </div>
 
+                <div class="discount-section">
+                    <h3>Mã giảm giá</h3>
+                    <div class="discount-input-group" *ngIf="!appliedDiscount()">
+                        <input type="text" [(ngModel)]="discountCode" placeholder="Nhập mã giảm giá">
+                        <button (click)="applyDiscount()">Áp dụng</button>
+                    </div>
+                    <div class="applied-discount" *ngIf="appliedDiscount()">
+                        <div class="discount-info">
+                            <span class="code">{{ appliedDiscount()?.code }}</span>
+                            <span class="value">-{{ discountAmount | number:'1.0-0' }}đ</span>
+                        </div>
+                        <button class="remove-btn" (click)="removeDiscount()">✕</button>
+                    </div>
+                    <p class="error-text" *ngIf="discountError()">{{ discountError() }}</p>
+                </div>
+
                 <div class="order-totals">
                     <div class="total-row">
                         <span>Tạm tính</span>

@@ -13,6 +13,12 @@ namespace backend1.Controllers
         private readonly IImageRepository _imageRepository;
         public ImagesController(IImageRepository imageRepository) { _imageRepository = imageRepository; }
 
+        [HttpGet("product/{productId:int}")]
+        public async Task<IActionResult> GetByProductId(int productId)
+        {
+            return Ok(await _imageRepository.GetImagesByProductIdAsync(productId));
+        }
+
         [HttpPost("upload")]
         public async Task<IActionResult> Upload([FromForm] ImageDTO request)
         {

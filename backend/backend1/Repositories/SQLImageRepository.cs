@@ -1,6 +1,7 @@
 ﻿using backend1.Data;
 using backend1.Models.Domain;
 using backend1.Models.DTO;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend1.Repositories
 {
@@ -15,6 +16,11 @@ namespace backend1.Repositories
             _webHostEnvironment = webHostEnvironment;
             _httpContextAccessor = httpContextAccessor;
             _dbContext = dbContext;
+        }
+
+        public async Task<List<Image>> GetImagesByProductIdAsync(int productId)
+        {
+            return await _dbContext.Images.Where(i => i.ProductId == productId).ToListAsync();
         }
 
         public async Task<Image> UploadImageAsync(ImageDTO request)

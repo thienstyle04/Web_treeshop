@@ -10,6 +10,10 @@ export interface Product {
     categoryId?: number;
     categoryName?: string;
     imageUrls: string[];
+    originalPrice?: number;
+    discountPercentage?: number;
+    isFlashSale?: boolean;
+    flashSaleEndTime?: Date;
 }
 
 export interface ProductDetails {
@@ -24,6 +28,10 @@ export interface ProductDetails {
     categoryName?: string;
     imageUrls: string[];
     reviews?: Review[];
+    originalPrice?: number;
+    discountPercentage?: number;
+    isFlashSale?: boolean;
+    flashSaleEndTime?: Date;
 }
 
 export interface AddProductRequest {

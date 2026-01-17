@@ -7,6 +7,7 @@ namespace backend1.Repositories
     {
         Task<List<CartItemDTO>> GetCartByUserIdAsync(int userId);
         Task<ShoppingCartItem> AddToCartAsync(AddToCartRequestDTO request);
+        Task<ShoppingCartItem?> UpdateCartItemAsync(int cartItemId, int quantity);
         Task<ShoppingCartItem?> RemoveFromCartAsync(int cartItemId);
     }
 }

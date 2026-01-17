@@ -7,6 +7,7 @@ namespace backend1.Repositories
     {
         Task<List<ShippingAddress>> GetAddressesByUserIdAsync(int userId);
         Task<ShippingAddress> AddAddressAsync(AddShippingAddressDTO request);
+        Task<ShippingAddress?> UpdateAddressAsync(int id, AddShippingAddressDTO request);
         Task<ShippingAddress?> DeleteAddressAsync(int id);
     }
 }

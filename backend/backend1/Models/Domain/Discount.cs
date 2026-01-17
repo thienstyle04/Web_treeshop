@@ -16,7 +16,16 @@ namespace backend1.Models.Domain
         [Column(TypeName = "decimal(18,2)")]
         public decimal MinimumOrderAmount { get; set; }
 
-        public DateTime ExpiryDate { get; set; }
+        public DateTime StartDate { get; set; } = DateTime.Now;
+        public DateTime EndDate { get; set; }
+
+        // Null -> Applies to order total
+        // Not Null -> Applies to specific product automatically (Flash Sale)
+        public int? AppliesToProductId { get; set; }
+
+        public int UsageLimit { get; set; } // 0 = Unlimited
+        public int UsedCount { get; set; }
+
         public bool IsActive { get; set; }
     }
 }

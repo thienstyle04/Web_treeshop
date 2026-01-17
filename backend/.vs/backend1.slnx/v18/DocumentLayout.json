@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "D:\\folder\\Program\\doanAngular\\Web_treeshop\\backend\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{440CE147-295D-19AC-4B49-CCCBF90B912E}|backend1\\backend1.csproj|d:\\folder\\program\\doanangular\\web_treeshop\\backend\\backend1\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{440CE147-295D-19AC-4B49-CCCBF90B912E}|backend1\\backend1.csproj|solutionrelative:backend1\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{440CE147-295D-19AC-4B49-CCCBF90B912E}|backend1\\backend1.csproj|d:\\folder\\program\\doanangular\\web_treeshop\\backend\\backend1\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{440CE147-295D-19AC-4B49-CCCBF90B912E}|backend1\\backend1.csproj|solutionrelative:backend1\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -25,10 +29,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{440CE147-295D-19AC-4B49-CCCBF90B912E}|backend1\\backend1.csproj|d:\\folder\\program\\doanangular\\web_treeshop\\backend\\backend1\\models\\domain\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{440CE147-295D-19AC-4B49-CCCBF90B912E}|backend1\\backend1.csproj|solutionrelative:backend1\\models\\domain\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{440CE147-295D-19AC-4B49-CCCBF90B912E}|backend1\\backend1.csproj|d:\\folder\\program\\doanangular\\web_treeshop\\backend\\backend1\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{440CE147-295D-19AC-4B49-CCCBF90B912E}|backend1\\backend1.csproj|solutionrelative:backend1\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -43,6 +43,19 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\folder\\Program\\doanAngular\\Web_treeshop\\backend\\backend1\\appsettings.json",
+              "RelativeDocumentMoniker": "backend1\\appsettings.json",
+              "ToolTip": "D:\\folder\\Program\\doanAngular\\Web_treeshop\\backend\\backend1\\appsettings.json",
+              "RelativeToolTip": "backend1\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-12-24T07:52:46.175Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "AuthController.cs",
               "DocumentMoniker": "D:\\folder\\Program\\doanAngular\\Web_treeshop\\backend\\backend1\\Controllers\\AuthController.cs",
               "RelativeDocumentMoniker": "backend1\\Controllers\\AuthController.cs",
@@ -50,12 +63,11 @@
               "RelativeToolTip": "backend1\\Controllers\\AuthController.cs",
               "ViewState": "AgIAAD4AAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-22T08:52:14.21Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-22T08:52:14.21Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "IUserRepository.cs",
               "DocumentMoniker": "D:\\folder\\Program\\doanAngular\\Web_treeshop\\backend\\backend1\\Repositories\\IUserRepository.cs",
               "RelativeDocumentMoniker": "backend1\\Repositories\\IUserRepository.cs",
@@ -63,12 +75,11 @@
               "RelativeToolTip": "backend1\\Repositories\\IUserRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-22T07:40:13.194Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-22T07:40:13.194Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "AddUserRequestDTO.cs",
               "DocumentMoniker": "D:\\folder\\Program\\doanAngular\\Web_treeshop\\backend\\backend1\\Models\\DTO\\AddUserRequestDTO.cs",
               "RelativeDocumentMoniker": "backend1\\Models\\DTO\\AddUserRequestDTO.cs",
@@ -76,12 +87,11 @@
               "RelativeToolTip": "backend1\\Models\\DTO\\AddUserRequestDTO.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-22T07:39:59.551Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-22T07:39:59.551Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "UserDTO.cs",
               "DocumentMoniker": "D:\\folder\\Program\\doanAngular\\Web_treeshop\\backend\\backend1\\Models\\DTO\\UserDTO.cs",
               "RelativeDocumentMoniker": "backend1\\Models\\DTO\\UserDTO.cs",
@@ -89,12 +99,11 @@
               "RelativeToolTip": "backend1\\Models\\DTO\\UserDTO.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-22T07:39:33.586Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-22T07:39:33.586Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "User.cs",
               "DocumentMoniker": "D:\\folder\\Program\\doanAngular\\Web_treeshop\\backend\\backend1\\Models\\Domain\\User.cs",
               "RelativeDocumentMoniker": "backend1\\Models\\Domain\\User.cs",
@@ -102,12 +111,11 @@
               "RelativeToolTip": "backend1\\Models\\Domain\\User.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-22T07:39:22.113Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-22T07:39:22.113Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "UsersController.cs",
               "DocumentMoniker": "D:\\folder\\Program\\doanAngular\\Web_treeshop\\backend\\backend1\\Controllers\\UsersController.cs",
               "RelativeDocumentMoniker": "backend1\\Controllers\\UsersController.cs",
@@ -115,21 +123,7 @@
               "RelativeToolTip": "backend1\\Controllers\\UsersController.cs",
               "ViewState": "AgIAABwAAAAAAAAAAAAkwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-22T07:38:46.927Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\folder\\Program\\doanAngular\\Web_treeshop\\backend\\backend1\\Program.cs",
-              "RelativeDocumentMoniker": "backend1\\Program.cs",
-              "ToolTip": "D:\\folder\\Program\\doanAngular\\Web_treeshop\\backend\\backend1\\Program.cs",
-              "RelativeToolTip": "backend1\\Program.cs",
-              "ViewState": "AgIAAEAAAAAAAAAAAAAiwEcAAAAgAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-22T07:35:17.239Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-22T07:38:46.927Z"
             }
           ]
         }

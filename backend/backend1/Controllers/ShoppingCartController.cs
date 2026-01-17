@@ -26,6 +26,13 @@ namespace backend1.Controllers
             return Ok(item);
         }
 
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> UpdateQuantity(int id, [FromBody] UpdateCartItemDTO request)
+        {
+            var item = await _cartRepository.UpdateCartItemAsync(id, request.Quantity);
+            return item == null ? NotFound() : Ok(item);
+        }
+
         [HttpDelete("remove/{id:int}")]
         public async Task<IActionResult> Remove(int id)
         {

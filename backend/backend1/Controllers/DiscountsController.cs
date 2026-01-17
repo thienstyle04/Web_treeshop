@@ -16,6 +16,13 @@ namespace backend1.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll() => Ok(await _discountRepository.GetAllDiscountsAsync());
 
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var discount = await _discountRepository.GetDiscountByIdAsync(id);
+            return discount == null ? NotFound() : Ok(discount);
+        }
+
         [HttpGet("check/{code}")]
         public async Task<IActionResult> CheckCode(string code)
         {
@@ -28,6 +35,13 @@ namespace backend1.Controllers
         {
             var discount = await _discountRepository.CreateDiscountAsync(request);
             return Ok(discount);
+        }
+
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update(int id, [FromBody] AddDiscountRequestDTO request)
+        {
+            var discount = await _discountRepository.UpdateDiscountAsync(id, request);
+            return discount == null ? NotFound() : Ok(discount);
         }
 
         [HttpDelete("{id:int}")]

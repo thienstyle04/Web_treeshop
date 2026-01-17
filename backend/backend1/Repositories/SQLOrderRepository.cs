@@ -104,8 +104,31 @@ namespace backend1.Repositories
         public async Task<Order> CreateOrderAsync(CreateOrderRequestDTO request)
         {
             // Lấy giá sản phẩm hiện tại để tính tiền
-            var productIds = request.Items.Select(i => i.ProductId).ToList();
+            var productIds = request.Items?.Select(i => i.ProductId).ToList() ?? new List<int>();
             var products = await _dbContext.Products.Where(p => productIds.Contains(p.Id)).ToListAsync();
+
+            // Handle shipping address - create new if inline address is provided
+            int shippingAddressId;
+            if (request.ShippingAddressId.HasValue && request.ShippingAddressId.Value > 0)
+            {
+                shippingAddressId = request.ShippingAddressId.Value;
+            }
+            else
+            {
+                // Create new shipping address from inline data
+                var newAddress = new ShippingAddress
+                {
+                    UserId = request.UserId,
+                    RecipientName = request.RecipientName ?? "",
+                    Phone = request.Phone ?? "",
+                    StreetAddress = request.StreetAddress ?? "",
+                    City = request.City ?? "",
+                    IsDefault = false
+                };
+                await _dbContext.ShippingAddresses.AddAsync(newAddress);
+                await _dbContext.SaveChangesAsync();
+                shippingAddressId = newAddress.Id;
+            }
 
             decimal total = 0;
             var newOrder = new Order
@@ -113,12 +136,12 @@ namespace backend1.Repositories
                 OrderDate = DateTime.Now,
                 OrderStatus = "Pending",
                 UserId = request.UserId,
-                ShippingAddressId = request.ShippingAddressId,
+                ShippingAddressId = shippingAddressId,
                 DiscountCodeUsed = request.DiscountCodeUsed,
                 DiscountAmount = request.DiscountAmount
             };
 
-            foreach (var item in request.Items)
+            foreach (var item in request.Items ?? new List<CreateOrderItemDTO>())
             {
                 var product = products.FirstOrDefault(p => p.Id == item.ProductId);
                 if (product != null)

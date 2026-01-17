@@ -37,8 +37,9 @@ namespace backend1.Repositories
                     Price = product.Price,
                     StockQuantity = product.StockQuantity,
                     DateAdded = product.DateAdded,
+                    CategoryId = product.CategoryId,
                     CategoryName = product.Category != null ? product.Category.Name : null,
-                    ImageUrls = product.Images.Select(i => i.FilePath).ToList()
+                    ImageUrls = product.Images.Select(i => i.FilePath ?? "").ToList()
                 })
                 .AsQueryable(); // Chuyển sang IQueryable để xử lý tiếp
 
@@ -70,7 +71,40 @@ namespace backend1.Repositories
             var skipResults = (pageNumber - 1) * pageSize;
 
             // Thực thi query và trả về kết quả
-            return await allProducts.Skip(skipResults).Take(pageSize).ToListAsync();
+            // Fetch active flash sales first (efficient in memory for small number of sales)
+            var now = DateTime.UtcNow;
+            var activeFlashSales = await _dbContext.Discounts
+                .Where(d => d.IsActive && d.AppliesToProductId != null && d.StartDate <= now && d.EndDate > now)
+                .ToListAsync();
+
+            // Execute query
+            var products = await allProducts.Skip(skipResults).Take(pageSize).ToListAsync();
+
+            // Apply Flash Sales Logic
+            foreach (var product in products)
+            {
+                var sale = activeFlashSales.FirstOrDefault(s => s.AppliesToProductId == product.Id);
+                if (sale != null)
+                {
+                    product.OriginalPrice = product.Price;
+                    product.IsFlashSale = true;
+                    product.FlashSaleEndTime = sale.EndDate;
+
+                    if (sale.DiscountType == "Percent")
+                    {
+                        product.DiscountPercentage = (double)sale.Value;
+                        product.Price = product.Price * (1 - (sale.Value / 100m));
+                    }
+                    else // Fixed amount
+                    {
+                        product.Price = product.Price - sale.Value;
+                        if (product.Price < 0) product.Price = 0;
+                        product.DiscountPercentage = (double)((product.OriginalPrice - product.Price) / product.OriginalPrice * 100);
+                    }
+                }
+            }
+
+            return products;
         }
 
         public async Task<ProductDetailsDTO?> GetProductByIdAsync(int id)
@@ -79,6 +113,8 @@ namespace backend1.Repositories
             var productDomain = await _dbContext.Products
                 .Include(p => p.Category)
                 .Include(p => p.Images)
+                .Include(p => p.reviews)
+                .ThenInclude(r => r.User)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             if (productDomain == null)
@@ -87,7 +123,7 @@ namespace backend1.Repositories
             }
 
             // Ánh xạ Domain Model sang DTO
-            return new ProductDetailsDTO
+            var dto = new ProductDetailsDTO
             {
                 Id = productDomain.Id,
                 Name = productDomain.Name,
@@ -96,9 +132,44 @@ namespace backend1.Repositories
                 Price = productDomain.Price,
                 StockQuantity = productDomain.StockQuantity,
                 DateAdded = productDomain.DateAdded,
+                CategoryId = productDomain.CategoryId,
                 CategoryName = productDomain.Category?.Name,
-                ImageUrls = productDomain.Images.Select(i => i.FilePath).ToList()
+                ImageUrls = productDomain.Images.Select(i => i.FilePath ?? "").ToList(),
+                Reviews = productDomain.reviews.Select(r => new ReviewDTO
+                {
+                    Id = r.Id,
+                    Rating = r.Rating,
+                    Comment = r.Comment,
+                    ReviewDate = r.ReviewDate,
+                    ProductId = r.ProductId,
+                    UserId = r.UserId,
+                    UserName = r.User?.Name ?? "Unknown"
+                }).ToList()
             };
+
+            // Flash Sale Logic
+            var now = DateTime.UtcNow;
+            var sale = await _dbContext.Discounts.FirstOrDefaultAsync(d => d.IsActive && d.AppliesToProductId == id && d.StartDate <= now && d.EndDate > now);
+            if (sale != null)
+            {
+                dto.OriginalPrice = dto.Price;
+                dto.IsFlashSale = true;
+                dto.FlashSaleEndTime = sale.EndDate;
+
+                if (sale.DiscountType == "Percent")
+                {
+                    dto.DiscountPercentage = (double)sale.Value;
+                    dto.Price = dto.Price * (1 - (sale.Value / 100m));
+                }
+                else
+                {
+                    dto.Price = dto.Price - sale.Value;
+                    if (dto.Price < 0) dto.Price = 0;
+                    dto.DiscountPercentage = (double)((dto.OriginalPrice - dto.Price) / dto.OriginalPrice * 100);
+                }
+            }
+
+            return dto;
         }
 
         public async Task<Product> AddProductAsync(AddProductRequestDTO addProductRequestDTO)

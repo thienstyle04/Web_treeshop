@@ -43,6 +43,18 @@ namespace backend1.Repositories
             return review;
         }
 
+        public async Task<Review?> UpdateReviewAsync(int id, AddReviewDTO request)
+        {
+            var review = await _dbContext.Reviews.FindAsync(id);
+            if (review == null) return null;
+
+            review.Rating = request.Rating;
+            review.Comment = request.Comment;
+
+            await _dbContext.SaveChangesAsync();
+            return review;
+        }
+
         public async Task<Review?> DeleteReviewAsync(int id)
         {
             var review = await _dbContext.Reviews.FindAsync(id);

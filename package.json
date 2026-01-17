@@ -1,0 +1,27 @@
+{
+    "name": "web-treeshop",
+    "version": "1.0.0",
+    "private": true,
+    "description": "TreeShop - E-commerce plant shop website (Angular + .NET Core)",
+    "workspaces": [
+        "frontend"
+    ],
+    "scripts": {
+        "dev": "concurrently -n \"frontend,backend\" -c \"cyan,green\" \"npm run frontend\" \"npm run backend\"",
+        "frontend": "npm run start --prefix frontend",
+        "frontend:build": "npm run build --prefix frontend",
+        "backend": "dotnet run --project backend/backend1/backend1.csproj",
+        "backend:watch": "dotnet watch run --project backend/backend1/backend1.csproj",
+        "build": "npm run frontend:build",
+        "clean": "rimraf frontend/dist backend/backend1/bin backend/backend1/obj",
+        "lint": "npm run lint --prefix frontend"
+    },
+    "devDependencies": {
+        "concurrently": "^8.2.2",
+        "rimraf": "^5.0.5"
+    },
+    "engines": {
+        "node": ">=18.0.0",
+        "npm": ">=9.0.0"
+    }
+}
