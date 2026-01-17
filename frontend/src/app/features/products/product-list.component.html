@@ -1,0 +1,98 @@
+<div class="product-list-page">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="header-content">
+            <h1>Sản phẩm</h1>
+            <p>Khám phá bộ sưu tập cây cảnh đa dạng của chúng tôi</p>
+        </div>
+    </div>
+
+    <div class="page-content">
+        <!-- Sidebar Filters -->
+        <aside class="filters-sidebar">
+            <div class="filter-section">
+                <h3>Danh mục</h3>
+                <ul class="category-list">
+                    <li>
+                        <button [class.active]="!selectedCategory()" (click)="selectCategory(null)">
+                            Tất cả
+                        </button>
+                    </li>
+                    @for (category of categories(); track category.id) {
+                    <li>
+                        <button [class.active]="selectedCategory() === category.id"
+                            (click)="selectCategory(category.id)">
+                            {{ category.name }}
+                        </button>
+                    </li>
+                    }
+                </ul>
+            </div>
+
+            <div class="filter-section">
+                <h3>Sắp xếp</h3>
+                <select [(ngModel)]="sortBy" (change)="applyFilters()">
+                    <option value="newest">Mới nhất</option>
+                    <option value="price-asc">Giá tăng dần</option>
+                    <option value="price-desc">Giá giảm dần</option>
+                    <option value="name">Tên A-Z</option>
+                </select>
+            </div>
+        </aside>
+
+        <!-- Products Grid -->
+        <main class="products-main">
+            <div class="products-toolbar">
+                <span class="result-count">
+                    Hiển thị {{ filteredProducts().length }} sản phẩm
+                </span>
+                <div class="view-options">
+                    <button [class.active]="viewMode === 'grid'" (click)="viewMode = 'grid'" aria-label="Grid view">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                            fill="currentColor">
+                            <rect x="3" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="14" width="7" height="7"></rect>
+                            <rect x="3" y="14" width="7" height="7"></rect>
+                        </svg>
+                    </button>
+                    <button [class.active]="viewMode === 'list'" (click)="viewMode = 'list'" aria-label="List view">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                            fill="currentColor">
+                            <rect x="3" y="4" width="18" height="4"></rect>
+                            <rect x="3" y="10" width="18" height="4"></rect>
+                            <rect x="3" y="16" width="18" height="4"></rect>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            @if (loading()) {
+            <div class="products-grid">
+                @for (i of [1,2,3,4,5,6,7,8]; track i) {
+                <div class="product-skeleton">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton-text"></div>
+                        <div class="skeleton-text short"></div>
+                    </div>
+                </div>
+                }
+            </div>
+            } @else if (filteredProducts().length === 0) {
+            <div class="empty-state">
+                <span class="empty-icon">🌱</span>
+                <h3>Không tìm thấy sản phẩm</h3>
+                <p>Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm</p>
+                <button class="reset-btn" (click)="resetFilters()">Xóa bộ lọc</button>
+            </div>
+            } @else {
+            <div class="products-grid" [class.list-view]="viewMode === 'list'">
+                @for (product of filteredProducts(); track product.id) {
+                <app-product-card [product]="product"></app-product-card>
+                }
+            </div>
+            }
+        </main>
+    </div>
+</div>

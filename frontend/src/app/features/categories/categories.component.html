@@ -1,0 +1,29 @@
+<div class="categories-page">
+    <div class="page-header">
+        <h1>Danh mục sản phẩm</h1>
+        <p>Khám phá các loại cây cảnh đa dạng</p>
+    </div>
+
+    <div class="categories-container">
+        @if (loading()) {
+        <div class="categories-grid">
+            @for (i of [1,2,3,4,5,6]; track i) {
+            <div class="category-card skeleton"></div>
+            }
+        </div>
+        } @else {
+        <div class="categories-grid">
+            @for (category of categories(); track category.id) {
+            <a [routerLink]="['/products']" [queryParams]="{category: category.id}" class="category-card">
+                <div class="category-icon">
+                    {{ getCategoryIcon(category.name || '') }}
+                </div>
+                <h3>{{ category.name }}</h3>
+                <p>{{ category.description || 'Xem các sản phẩm trong danh mục này' }}</p>
+                <span class="view-link">Xem sản phẩm →</span>
+            </a>
+            }
+        </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,93 @@
+<div class="admin-orders">
+    <div class="page-header">
+        <h1>Quản lý đơn hàng</h1>
+        <div class="filters">
+            <select [(ngModel)]="statusFilter" (change)="filterOrders()">
+                <option value="">Tất cả trạng thái</option>
+                <option value="Pending">Chờ xử lý</option>
+                <option value="Processing">Đang xử lý</option>
+                <option value="Shipped">Đang giao</option>
+                <option value="Delivered">Đã giao</option>
+                <option value="Cancelled">Đã hủy</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Orders Table -->
+    <div class="table-container">
+        @if (loading()) {
+        <div class="loading">Đang tải...</div>
+        } @else {
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Mã đơn</th>
+                    <th>Ngày đặt</th>
+                    <th>Khách hàng</th>
+                    <th>Tổng tiền</th>
+                    <th>Trạng thái</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (order of filteredOrders(); track order.id) {
+                <tr>
+                    <td class="order-id">#{{ order.id }}</td>
+                    <td>{{ order.orderDate | date:'dd/MM/yyyy HH:mm' }}</td>
+                    <td>
+                        <span class="customer-info" title="User ID: {{order.userId}}">
+                            {{ userMap().get(order.userId) || 'Khách hàng #' + order.userId }}
+                        </span>
+                    </td>
+                    <td class="price">{{ order.totalAmount | number:'1.0-0' }}đ</td>
+                    <td>
+                        <div class="status-actions">
+                            <button class="btn-icon delete" (click)="confirmDelete(order)" title="Xóa đơn hàng">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path
+                                        d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                                    </path>
+                                </svg>
+                            </button>
+                            <select class="status-select" [(ngModel)]="order.status" (change)="updateStatus(order)">
+                                <option value="Pending">Chờ xử lý</option>
+                                <option value="Processing">Đang xử lý</option>
+                                <option value="Shipped">Đang giao</option>
+                                <option value="Delivered">Đã giao</option>
+                                <option value="Cancelled">Đã hủy</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                } @empty {
+                <tr>
+                    <td colspan="5" class="empty">Không có đơn hàng nào</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+        }
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    @if (showDeleteModal) {
+    <div class="modal-overlay" (click)="showDeleteModal = false">
+        <div class="modal confirm-modal" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h2>Xác nhận xóa</h2>
+                <button class="close-btn" (click)="showDeleteModal = false">×</button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn xóa đơn hàng <strong>#{{ orderToDelete?.id }}</strong> không?</p>
+                <p class="warning-text">Hành động này không thể hoàn tác.</p>
+                <div class="modal-actions">
+                    <button class="btn-secondary" (click)="showDeleteModal = false">Hủy</button>
+                    <button class="btn-danger" (click)="deleteOrder()">Xóa</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+</div>

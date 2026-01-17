@@ -1,0 +1,39 @@
+<div class="product-card">
+    <a [routerLink]="['/products', product.id]" class="card-image">
+        @if (product.imageUrls && product.imageUrls.length > 0) {
+        <img [src]="product.imageUrls[0]" [alt]="product.name" (error)="onImageError($event)">
+        } @else {
+        <img [src]="getFallbackImage()" [alt]="product.name">
+        }
+        <div class="card-overlay">
+            <button class="quick-view-btn">Xem nhanh</button>
+        </div>
+        @if (product.stockQuantity < 5 && product.stockQuantity> 0) {
+            <span class="stock-badge low">Còn {{ product.stockQuantity }}</span>
+            }
+            @if (product.stockQuantity === 0) {
+            <span class="stock-badge out">Hết hàng</span>
+            }
+            @if (product.isFlashSale) {
+            <span class="flash-sale-label">⚡ -{{ product.discountPercentage }}%</span>
+            }
+    </a>
+
+    <div class="card-content">
+        <p class="category-name">{{ product.categoryName || 'Cây cảnh' }}</p>
+        <h3 class="product-name">
+            <a [routerLink]="['/products', product.id]">{{ product.name }}</a>
+        </h3>
+        @if (product.scientificName) {
+        <p class="scientific-name">{{ product.scientificName }}</p>
+        }
+        <div class="card-footer">
+            <div class="price-container">
+                @if (product.isFlashSale) {
+                <span class="original-price">{{ product.originalPrice | number:'1.0-0' }}đ</span>
+                }
+                <span class="price">{{ product.price | number:'1.0-0' }}đ</span>
+            </div>
+        </div>
+    </div>
+</div>

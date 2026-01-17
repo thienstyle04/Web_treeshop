@@ -1,0 +1,139 @@
+<div class="product-detail-page">
+    @if (loading()) {
+    <div class="loading-container">
+        <div class="spinner"></div>
+    </div>
+    } @else if (product()) {
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a routerLink="/">Trang chủ</a>
+        <span>/</span>
+        <a routerLink="/products">Sản phẩm</a>
+        <span>/</span>
+        <span>{{ product()!.name }}</span>
+    </nav>
+
+    <div class="product-container">
+        <!-- Product Images -->
+        <div class="product-images">
+            <div class="main-image">
+                @if (selectedImage()) {
+                <img [src]="selectedImage()" [alt]="product()!.name">
+                } @else {
+                <img src="assets/images/placeholder-plant.jpg" [alt]="product()!.name">
+                }
+            </div>
+            @if (product()!.imageUrls && product()!.imageUrls.length > 1) {
+            <div class="thumbnail-list">
+                @for (imageUrl of product()!.imageUrls; track $index) {
+                <button class="thumbnail" [class.active]="selectedImage() === imageUrl" (click)="selectImage(imageUrl)">
+                    <img [src]="imageUrl" [alt]="product()!.name">
+                </button>
+                }
+            </div>
+            }
+        </div>
+
+        <!-- Product Info -->
+        <div class="product-info">
+            <span class="category-tag">{{ product()!.categoryName || 'Cây cảnh' }}</span>
+            <h1 class="product-name">{{ product()!.name }}</h1>
+
+            @if (product()!.scientificName) {
+            <p class="scientific-name">{{ product()!.scientificName }}</p>
+            }
+
+            <!-- Rating -->
+            <div class="rating-row">
+                <div class="stars">
+                    @for (star of [1,2,3,4,5]; track star) {
+                    <span [class.filled]="star <= averageRating()">★</span>
+                    }
+                </div>
+                <span class="rating-text">
+                    {{ averageRating() | number:'1.1-1' }} ({{ product()!.reviews?.length || 0 }} đánh giá)
+                </span>
+            </div>
+
+            <div class="price-section">
+                <span class="price">{{ product()!.price | number:'1.0-0' }}đ</span>
+            </div>
+
+            <div class="stock-status" [class.in-stock]="product()!.stockQuantity > 0">
+                @if (product()!.stockQuantity > 0) {
+                <span class="status-icon">✓</span> Còn hàng ({{ product()!.stockQuantity }} sản phẩm)
+                } @else {
+                <span class="status-icon">✕</span> Hết hàng
+                }
+            </div>
+
+            <div class="description">
+                <h3>Mô tả</h3>
+                <p>{{ product()!.description || 'Chưa có mô tả cho sản phẩm này.' }}</p>
+            </div>
+
+            <!-- Add to Cart -->
+            <div class="add-to-cart-section">
+                <div class="quantity-selector">
+                    <button (click)="decreaseQuantity()" [disabled]="quantity <= 1">-</button>
+                    <input type="number" [(ngModel)]="quantity" min="1" [max]="product()!.stockQuantity">
+                    <button (click)="increaseQuantity()" [disabled]="quantity >= product()!.stockQuantity">+</button>
+                </div>
+                <button class="add-to-cart-btn" (click)="addToCart()"
+                    [disabled]="product()!.stockQuantity === 0 || isAdding()">
+                    @if (isAdding()) {
+                    <span class="btn-spinner"></span>
+                    Đang thêm...
+                    } @else {
+                    🛒 Thêm vào giỏ hàng
+                    }
+                </button>
+            </div>
+
+            <div class="product-meta">
+                <div class="meta-item">
+                    <span class="meta-label">Danh mục:</span>
+                    <a [routerLink]="['/products']" [queryParams]="{category: product()!.categoryId}">
+                        {{ product()!.categoryName || 'Cây cảnh' }}
+                    </a>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Ngày thêm:</span>
+                    <span>{{ product()!.dateAdded | date:'dd/MM/yyyy' }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reviews Section -->
+    <section class="reviews-section">
+        <h2>Đánh giá sản phẩm</h2>
+        <ng-container *ngIf="(product()?.reviews?.length ?? 0) > 0; else noReviews">
+            <div class="reviews-list">
+                <ng-container *ngFor="let review of product()?.reviews; trackBy: trackById">
+                    <div class="review-card">
+                        <div class="review-header">
+                            <span class="reviewer-name">{{ review.userName }}</span>
+                            <div class="review-stars">
+                                <ng-container *ngFor="let star of [1,2,3,4,5]">
+                                    <span [class.filled]="star <= review.rating">★</span>
+                                </ng-container>
+                            </div>
+                        </div>
+                        <p class="review-comment">{{ review.comment }}</p>
+                        <span class="review-date">{{ review.reviewDate | date:'dd/MM/yyyy' }}</span>
+                    </div>
+                </ng-container>
+            </div>
+        </ng-container>
+        <ng-template #noReviews>
+            <p class="no-reviews">Chưa có đánh giá nào cho sản phẩm này.</p>
+        </ng-template>
+    </section>
+    } @else {
+    <div class="not-found">
+        <h2>Sản phẩm không tồn tại</h2>
+        <a routerLink="/products">Quay lại danh sách</a>
+    </div>
+    }
+</div>
