@@ -4,7 +4,14 @@
     </div>
 
     <div class="cart-container">
-        @if (cartService.cartItems().length === 0) {
+        @if (!isLoggedIn) {
+        <div class="empty-cart">
+            <span class="empty-icon">🔐</span>
+            <h2>Vui lòng đăng nhập</h2>
+            <p>Bạn cần đăng nhập để xem và quản lý giỏ hàng</p>
+            <a routerLink="/login" [queryParams]="{returnUrl: '/cart'}" class="shop-btn">Đăng nhập ngay</a>
+        </div>
+        } @else if (cartService.cartItems().length === 0) {
         <div class="empty-cart">
             <span class="empty-icon">🛒</span>
             <h2>Giỏ hàng trống</h2>
@@ -75,10 +82,42 @@
             <div class="cart-summary">
                 <h3>Tóm tắt đơn hàng</h3>
 
+                <!-- Discount Code Section -->
+                <div class="discount-section">
+                    <label>Mã giảm giá</label>
+                    @if (!appliedDiscount()) {
+                    <button class="select-discount-btn" (click)="openDiscountModal()">
+                        🎟️ Chọn mã giảm giá
+                        @if (availableDiscounts().length > 0) {
+                        <span class="badge">{{ availableDiscounts().length }}</span>
+                        }
+                    </button>
+                    } @else {
+                    <div class="applied-discount">
+                        <span class="discount-tag">
+                            🎟️ {{ appliedDiscount()?.code }}
+                            @if (appliedDiscount()?.discountType === 'Percent') {
+                            (-{{ appliedDiscount()?.value }}%)
+                            } @else {
+                            (-{{ appliedDiscount()?.value | number:'1.0-0' }}đ)
+                            }
+                        </span>
+                        <button class="remove-discount" (click)="removeDiscount()">×</button>
+                    </div>
+                    }
+                </div>
+
                 <div class="summary-row">
                     <span>Tạm tính</span>
                     <span>{{ cartService.cartTotal() | number:'1.0-0' }}đ</span>
                 </div>
+
+                @if (appliedDiscount()) {
+                <div class="summary-row discount">
+                    <span>Giảm giá</span>
+                    <span>-{{ discountAmount | number:'1.0-0' }}đ</span>
+                </div>
+                }
 
                 <div class="summary-row">
                     <span>Phí vận chuyển</span>
@@ -119,3 +158,51 @@
         }
     </div>
 </div>
+
+<!-- Discount Modal -->
+@if (showDiscountModal()) {
+<div class="modal-overlay" (click)="closeDiscountModal()">
+    <div class="discount-modal" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h3>🎟️ Chọn mã giảm giá</h3>
+            <button class="close-btn" (click)="closeDiscountModal()">×</button>
+        </div>
+        <div class="modal-body">
+            @if (availableDiscounts().length === 0) {
+            <div class="no-discounts">
+                <p>Hiện không có mã giảm giá nào khả dụng</p>
+            </div>
+            } @else {
+            <div class="discount-list">
+                @for (discount of availableDiscounts(); track discount.id) {
+                <div class="discount-item" [class.disabled]="cartService.cartTotal() < discount.minimumOrderAmount"
+                    (click)="selectDiscount(discount)">
+                    <div class="discount-info">
+                        <span class="discount-code">{{ discount.code }}</span>
+                        <span class="discount-value">
+                            @if (discount.discountType === 'Percent') {
+                            Giảm {{ discount.value }}%
+                            } @else {
+                            Giảm {{ discount.value | number:'1.0-0' }}đ
+                            }
+                        </span>
+                        @if (discount.minimumOrderAmount > 0) {
+                        <span class="discount-min">Đơn tối thiểu: {{ discount.minimumOrderAmount | number:'1.0-0'
+                            }}đ</span>
+                        }
+                    </div>
+                    <div class="discount-action">
+                        @if (cartService.cartTotal() >= discount.minimumOrderAmount) {
+                        <span class="select-text">Chọn</span>
+                        } @else {
+                        <span class="not-eligible">Chưa đủ điều kiện</span>
+                        }
+                    </div>
+                </div>
+                }
+            </div>
+            }
+        </div>
+    </div>
+</div>
+}

@@ -8,6 +8,8 @@
         public string? Description { get; set; }
         public string? Role { get; set; } // Phân quyền (e.g., "Admin", "Customer")
         public string? PasswordHash { get; set; } // Cần thiết để lưu mật khẩu băm
+        public string? Email { get; set; }
+        public string? PhoneNumber { get; set; }
 
         // Navigation Properties
         public List<Order> Orders { get; set; } = new List<Order>();

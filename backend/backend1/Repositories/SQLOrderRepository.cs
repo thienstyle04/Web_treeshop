@@ -53,6 +53,7 @@ namespace backend1.Repositories
                     OrderDate = order.OrderDate,
                     OrderStatus = order.OrderStatus,
                     TotalAmount = order.TotalAmount,
+                    UserId = order.UserId,
                     OrderItems = order.OrderItems.Select(oi => new OrderDetailItemDTO
                     {
                         ProductId = oi.ProductId,
@@ -146,6 +147,13 @@ namespace backend1.Repositories
                 var product = products.FirstOrDefault(p => p.Id == item.ProductId);
                 if (product != null)
                 {
+                    // Kiểm tra và giảm số lượng tồn kho
+                    if (product.StockQuantity < item.Quantity)
+                    {
+                        throw new InvalidOperationException($"Sản phẩm '{product.Name}' không đủ số lượng trong kho. Còn lại: {product.StockQuantity}");
+                    }
+                    product.StockQuantity -= item.Quantity;
+
                     var price = product.Price;
                     total += price * item.Quantity;
                     newOrder.OrderItems.Add(new OrderItem
@@ -190,6 +198,7 @@ namespace backend1.Repositories
                 OrderDate = o.OrderDate,
                 TotalAmount = o.TotalAmount,
                 OrderStatus = o.OrderStatus,
+                UserId = o.UserId,
                 RecipientName = o.ShippingAddress?.RecipientName,
                 OrderItems = o.OrderItems.Select(oi => new OrderDetailItemDTO
                 {

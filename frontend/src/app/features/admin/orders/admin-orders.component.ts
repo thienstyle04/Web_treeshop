@@ -69,7 +69,7 @@ export class AdminOrdersComponent implements OnInit {
             this.filteredOrders.set(this.orders());
         } else {
             this.filteredOrders.set(
-                this.orders().filter(o => o.status === this.statusFilter)
+                this.orders().filter(o => o.orderStatus === this.statusFilter)
             );
         }
     }
@@ -95,7 +95,7 @@ export class AdminOrdersComponent implements OnInit {
     }
 
     updateStatus(order: Order) {
-        this.orderService.updateStatus(order.id, order.status).subscribe();
+        this.orderService.updateStatus(order.id, order.orderStatus).subscribe();
     }
 
     confirmDelete(order: Order) {

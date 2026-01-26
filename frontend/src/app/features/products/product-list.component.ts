@@ -80,11 +80,12 @@ export class ProductListComponent implements OnInit {
     // Filter by category
     if (this.selectedCategory()) {
       filtered = filtered.filter(p => p.categoryId === this.selectedCategory());
-      // Limit to 4 products when a specific category is selected
-      filtered = filtered.slice(0, 4);
+      // Limit to 10 products when a specific category is selected
+      filtered = filtered.slice(0, 10);
     } else {
-      // "Tất cả" - show only 4 featured products from allowed categories
-      filtered = filtered.slice(0, 4);
+      // "Tất cả" - show ALL products from allowed categories (Cây cảnh văn phòng, Cây nội thất, Sen đá)
+      const allowedCategories = ['Cây Cảnh Văn Phòng', 'Cây Nội Thất', 'Sen Đá'];
+      filtered = filtered.filter(p => allowedCategories.includes(p.categoryName || ''));
     }
 
 

@@ -196,7 +196,9 @@ namespace backend1.Repositories
         public async Task<Product?> UpdateProductByIdAsync(int id, AddProductRequestDTO updateProductDTO)
         {
             // Tìm Product Domain Model
-            var productDomain = await _dbContext.Products.FirstOrDefaultAsync(x => x.Id == id);
+            var productDomain = await _dbContext.Products
+                .Include(p => p.Images)
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             if (productDomain == null)
             {
@@ -211,6 +213,33 @@ namespace backend1.Repositories
             productDomain.StockQuantity = updateProductDTO.StockQuantity;
             productDomain.DateAdded = updateProductDTO.DateAdded;
             productDomain.CategoryId = updateProductDTO.CategoryId;
+
+            // Cập nhật ảnh nếu có ImageUrl mới
+            if (!string.IsNullOrWhiteSpace(updateProductDTO.ImageUrl))
+            {
+                // Xoá ảnh cũ (nếu cần cập nhật ảnh mới)
+                if (productDomain.Images != null && productDomain.Images.Any())
+                {
+                    var mainImage = productDomain.Images.FirstOrDefault();
+                    if (mainImage != null)
+                    {
+                        mainImage.FilePath = updateProductDTO.ImageUrl;
+                    }
+                }
+                else
+                {
+                    // Thêm ảnh mới nếu chưa có
+                    productDomain.Images = new List<Image>
+                    {
+                        new Image
+                        {
+                            FilePath = updateProductDTO.ImageUrl,
+                            IsThumbnail = true,
+                            ProductId = productDomain.Id
+                        }
+                    };
+                }
+            }
 
             // Lưu thay đổi
             await _dbContext.SaveChangesAsync();

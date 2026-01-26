@@ -24,5 +24,8 @@ namespace backend1.Models.DTO
 
         [Required(ErrorMessage = "Phải cung cấp CategoryId")]
         public int CategoryId { get; set; }
+
+        // Optional: URL ảnh sản phẩm
+        public string? ImageUrl { get; set; }
     }
 }

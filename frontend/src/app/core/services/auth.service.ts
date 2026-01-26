@@ -51,7 +51,13 @@ export class AuthService {
     }
 
     register(userData: RegisterRequest): Observable<any> {
-        return this.http.post(`${this.baseUrl}/register`, userData);
+        const payload = {
+            fullName: userData.fullName,
+            email: userData.email,
+            password: userData.password,
+            phoneNumber: userData.phone
+        };
+        return this.http.post(`${this.baseUrl}/register`, payload);
     }
 
     logout(): void {

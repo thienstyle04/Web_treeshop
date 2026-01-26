@@ -22,8 +22,8 @@ namespace backend1.Repositories
 
         public async Task<User?> RegisterAsync(RegisterRequestDTO request)
         {
-            // Kiểm tra user đã tồn tại chưa
-            var existingUser = await GetUserByNameAsync(request.Name);
+            // Kiểm tra user đã tồn tại chưa (dùng Email)
+            var existingUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == request.Email || u.Name == request.Email);
             if (existingUser != null)
             {
                 return null; // User đã tồn tại
@@ -34,10 +34,11 @@ namespace backend1.Repositories
 
             var user = new User
             {
-                Name = request.Name,
+                Name = request.Email, // Dùng Email làm tên đăng nhập
                 FullName = request.FullName,
+                Email = request.Email,
+                PhoneNumber = request.PhoneNumber,
                 PasswordHash = passwordHash,
-                Description = request.Description,
                 Role = "Customer" // Mặc định là Customer
             };
 
