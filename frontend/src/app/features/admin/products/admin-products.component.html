@@ -138,6 +138,16 @@
                     <label>Mô tả</label>
                     <textarea [(ngModel)]="formData.description" rows="4"></textarea>
                 </div>
+                <div class="form-group">
+                    <label>Link ảnh sản phẩm</label>
+                    <input type="text" [(ngModel)]="formData.imageUrl" placeholder="https://example.com/image.jpg">
+                    @if (formData.imageUrl) {
+                    <div class="image-preview">
+                        <img [src]="formData.imageUrl" alt="Preview" (error)="formData.imageUrl = ''">
+                        <span class="preview-label">Xem trước</span>
+                    </div>
+                    }
+                </div>
             </div>
             <div class="modal-footer">
                 <button class="btn-secondary" (click)="closeModal()">Hủy</button>

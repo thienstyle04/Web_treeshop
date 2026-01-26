@@ -32,7 +32,7 @@ export class HomeComponent implements OnInit {
       next: (products) => {
         // Filter out products from "Chậu Cây Cảnh" category
         const filteredProducts = products.filter(p => p.categoryName !== 'Chậu Cây Cảnh');
-        this.featuredProducts.set(filteredProducts.slice(0, 8));
+        this.featuredProducts.set(filteredProducts.slice(0, 10));
         this.productsLoading.set(false);
       },
       error: () => {
@@ -55,9 +55,20 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  showNewsletterPopup = signal(false);
+
   subscribeNewsletter(event: Event) {
     event.preventDefault();
-    // Handle newsletter subscription
-    console.log('Newsletter subscription');
+    const form = event.target as HTMLFormElement;
+    const input = form.querySelector('input') as HTMLInputElement;
+
+    if (input && input.value) {
+      this.showNewsletterPopup.set(true);
+      form.reset();
+    }
+  }
+
+  closePopup() {
+    this.showNewsletterPopup.set(false);
   }
 }

@@ -51,7 +51,8 @@
                                     </path>
                                 </svg>
                             </button>
-                            <select class="status-select" [(ngModel)]="order.status" (change)="updateStatus(order)">
+                            <select class="status-select" [(ngModel)]="order.orderStatus"
+                                (change)="updateStatus(order)">
                                 <option value="Pending">Chờ xử lý</option>
                                 <option value="Processing">Đang xử lý</option>
                                 <option value="Shipped">Đang giao</option>

@@ -31,7 +31,6 @@ export const routes: Routes = [
     {
         path: 'cart',
         loadComponent: () => import('./features/cart/cart.component').then(m => m.CartComponent),
-        canActivate: [authGuard],
         title: 'Giỏ hàng - TreeShop'
     },
     {

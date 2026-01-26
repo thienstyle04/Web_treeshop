@@ -6,6 +6,7 @@
         public DateTime OrderDate { get; set; }
         public decimal TotalAmount { get; set; }
         public string? OrderStatus { get; set; }
+        public int UserId { get; set; }
         public string? RecipientName { get; set; } // Lấy từ ShippingAddress
         public List<OrderDetailItemDTO> OrderItems { get; set; }
     }

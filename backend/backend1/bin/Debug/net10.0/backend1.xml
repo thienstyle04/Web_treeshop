@@ -38,6 +38,18 @@
         <member name="M:backend1.Migrations.UpdateDiscountModel.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
+        <member name="T:backend1.Migrations.AddUserInfo">
+            <inheritdoc />
+        </member>
+        <member name="M:backend1.Migrations.AddUserInfo.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:backend1.Migrations.AddUserInfo.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:backend1.Migrations.AddUserInfo.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
         <member name="T:backend1.Migrations.LoginAuthDb.CreateAuthDatabase">
             <inheritdoc />
         </member>

@@ -354,3 +354,27 @@
 .delete-modal .modal-footer {
     justify-content: center;
 }
+
+/* Image Preview */
+.image-preview {
+    margin-top: 0.75rem;
+    position: relative;
+    display: inline-block;
+}
+
+.image-preview img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 2px solid #e8f5e9;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.image-preview .preview-label {
+    display: block;
+    text-align: center;
+    font-size: 0.75rem;
+    color: #888;
+    margin-top: 0.25rem;
+}

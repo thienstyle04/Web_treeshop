@@ -135,7 +135,7 @@ export interface Order {
     userId: number;
     orderDate: Date;
     totalAmount: number;
-    status: string;
+    orderStatus: string;
     shippingAddressId?: number;
 }
 

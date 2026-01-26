@@ -1,6 +1,6 @@
 import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Product } from '../../../core/models';
 import { CartService } from '../../../core/services/cart.service';
 import { AuthService } from '../../../core/services/auth.service';
@@ -17,6 +17,7 @@ export class ProductCardComponent {
 
   private cartService = inject(CartService);
   private authService = inject(AuthService);
+  private router = inject(Router);
 
   isAdding = false;
 
@@ -26,7 +27,8 @@ export class ProductCardComponent {
 
     const userId = this.authService.getUserId();
     if (!userId) {
-      // Redirect to login
+      // Chưa đăng nhập -> chuyển đến trang login
+      this.router.navigate(['/login'], { queryParams: { returnUrl: '/products' } });
       return;
     }
 

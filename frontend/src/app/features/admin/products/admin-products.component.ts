@@ -36,7 +36,8 @@ export class AdminProductsComponent implements OnInit {
         description: '',
         price: 0,
         stockQuantity: 0,
-        categoryId: null as number | null
+        categoryId: null as number | null,
+        imageUrl: ''
     };
 
     productToDelete: Product | null = null;
@@ -92,7 +93,8 @@ export class AdminProductsComponent implements OnInit {
             description: product.description || '',
             price: product.price,
             stockQuantity: product.stockQuantity,
-            categoryId: product.categoryId || null
+            categoryId: product.categoryId || null,
+            imageUrl: product.imageUrls?.[0] || ''
         };
         this.showEditModal = true;
     }
@@ -116,7 +118,8 @@ export class AdminProductsComponent implements OnInit {
             description: '',
             price: 0,
             stockQuantity: 0,
-            categoryId: null
+            categoryId: null,
+            imageUrl: ''
         };
     }
 
@@ -133,7 +136,8 @@ export class AdminProductsComponent implements OnInit {
             description: this.formData.description,
             price: this.formData.price,
             stockQuantity: this.formData.stockQuantity,
-            categoryId: this.formData.categoryId
+            categoryId: this.formData.categoryId,
+            imageUrl: this.formData.imageUrl
         };
 
         if (this.showEditModal) {
