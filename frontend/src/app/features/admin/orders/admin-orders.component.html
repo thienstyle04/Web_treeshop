@@ -30,7 +30,7 @@
             </thead>
             <tbody>
                 @for (order of filteredOrders(); track order.id) {
-                <tr>
+                <tr class="clickable-row" (click)="viewOrder(order)">
                     <td class="order-id">#{{ order.id }}</td>
                     <td>{{ order.orderDate | date:'dd/MM/yyyy HH:mm' }}</td>
                     <td>
@@ -40,7 +40,7 @@
                     </td>
                     <td class="price">{{ order.totalAmount | number:'1.0-0' }}đ</td>
                     <td>
-                        <div class="status-actions">
+                        <div class="status-actions" (click)="$event.stopPropagation()">
                             <button class="btn-icon delete" (click)="confirmDelete(order)" title="Xóa đơn hàng">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -71,6 +71,88 @@
         </table>
         }
     </div>
+
+    <!-- Order Detail Modal -->
+    @if (showOrderDetailModal && selectedOrder) {
+    <div class="modal-overlay" (click)="closeOrderDetail()">
+        <div class="modal order-detail-modal" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h2>Chi tiết đơn hàng #{{ selectedOrder.id }}</h2>
+                <button class="close-btn" (click)="closeOrderDetail()">×</button>
+            </div>
+            <div class="modal-body">
+                <!-- Customer Info -->
+                <div class="customer-section">
+                    <h3>🧑 Thông tin khách hàng</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="label">Người nhận:</span>
+                            <span class="value">{{ selectedOrder.recipientName || userMap().get(selectedOrder.userId) ||
+                                'N/A' }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Số điện thoại:</span>
+                            <span class="value">{{ selectedOrder.phone || 'N/A' }}</span>
+                        </div>
+                        <div class="info-item full-width">
+                            <span class="label">Địa chỉ:</span>
+                            <span class="value">{{ selectedOrder.streetAddress || 'N/A' }}{{ selectedOrder.city ? ', ' +
+                                selectedOrder.city : '' }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Items -->
+                <div class="items-section">
+                    <h3>📦 Sản phẩm ({{ selectedOrder.orderItems?.length || 0 }})</h3>
+                    <table class="items-table">
+                        <thead>
+                            <tr>
+                                <th>Sản phẩm</th>
+                                <th>Đơn giá</th>
+                                <th>Số lượng</th>
+                                <th>Thành tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (item of selectedOrder.orderItems; track item.productId) {
+                            <tr>
+                                <td>{{ item.productName || 'Sản phẩm #' + item.productId }}</td>
+                                <td>{{ (item.price || item.unitPrice || 0) | number:'1.0-0' }}đ</td>
+                                <td>{{ item.quantity }}</td>
+                                <td class="item-total">{{ ((item.price || item.unitPrice || 0) * item.quantity) |
+                                    number:'1.0-0' }}đ</td>
+                            </tr>
+                            } @empty {
+                            <tr>
+                                <td colspan="4" class="empty">Không có sản phẩm</td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="order-summary">
+                    <div class="summary-row">
+                        <span>Ngày đặt:</span>
+                        <span>{{ selectedOrder.orderDate | date:'dd/MM/yyyy HH:mm' }}</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Trạng thái:</span>
+                        <span class="status-badge" [class]="getStatusClass(selectedOrder.orderStatus)">
+                            {{ getStatusLabel(selectedOrder.orderStatus) }}
+                        </span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Tổng tiền:</span>
+                        <span class="total-price">{{ selectedOrder.totalAmount | number:'1.0-0' }}đ</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
 
     <!-- Delete Confirmation Modal -->
     @if (showDeleteModal) {

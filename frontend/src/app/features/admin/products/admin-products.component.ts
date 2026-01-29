@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '../../../core/services/product.service';
 import { CategoryService } from '../../../core/services/category.service';
 import { Product, Category } from '../../../core/models';
@@ -15,6 +16,7 @@ import { Product, Category } from '../../../core/models';
 export class AdminProductsComponent implements OnInit {
     private productService = inject(ProductService);
     private categoryService = inject(CategoryService);
+    private route = inject(ActivatedRoute);
 
     products = signal<Product[]>([]);
     filteredProducts = signal<Product[]>([]);
@@ -43,7 +45,13 @@ export class AdminProductsComponent implements OnInit {
     productToDelete: Product | null = null;
 
     ngOnInit() {
-        this.loadProducts();
+        // Subscribe to query params to filter by category from categories page
+        this.route.queryParams.subscribe(params => {
+            if (params['category']) {
+                this.selectedCategoryId = +params['category'];
+            }
+            this.loadProducts();
+        });
         this.loadCategories();
     }
 
@@ -52,7 +60,7 @@ export class AdminProductsComponent implements OnInit {
         this.productService.getAllProducts().subscribe({
             next: (products) => {
                 this.products.set(products);
-                this.filteredProducts.set(products);
+                this.filterProducts(); // Apply filter after loading
                 this.loading.set(false);
             },
             error: () => {

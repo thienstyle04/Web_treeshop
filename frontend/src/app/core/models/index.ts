@@ -137,15 +137,21 @@ export interface Order {
     totalAmount: number;
     orderStatus: string;
     shippingAddressId?: number;
+    recipientName?: string;
+    phone?: string;
+    streetAddress?: string;
+    city?: string;
+    orderItems?: OrderItem[];
 }
 
 export interface OrderItem {
-    id: number;
-    orderId: number;
+    id?: number;
+    orderId?: number;
     productId: number;
     productName?: string;
     quantity: number;
-    unitPrice: number;
+    unitPrice?: number;
+    price?: number; // Backend uses 'price'
 }
 
 export interface CreateOrderRequest {

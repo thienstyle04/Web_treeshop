@@ -8,8 +8,6 @@ import { ProvincesService, Province, District, Ward } from '../../core/services/
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 
-import { DiscountService, Discount } from '../../core/services/discount.service';
-
 @Component({
   selector: 'app-checkout',
   standalone: true,
@@ -21,7 +19,6 @@ export class CheckoutComponent implements OnInit {
   cartService = inject(CartService);
   private authService = inject(AuthService);
   private provincesService = inject(ProvincesService);
-  private discountService = inject(DiscountService);
   private router = inject(Router);
   private http = inject(HttpClient);
 
@@ -48,17 +45,17 @@ export class CheckoutComponent implements OnInit {
   errorMessage = signal('');
   orderId = 0;
 
-  // Discount Logic
-  discountCode = '';
-  appliedDiscount = signal<Discount | null>(null);
-  discountError = signal('');
+  // Get discount from CartService (selected in cart page)
+  get appliedDiscount() {
+    return this.cartService.appliedDiscount();
+  }
 
   get finalTotal(): number {
     const subtotal = this.cartService.cartTotal();
     let total = subtotal;
 
-    // Apply discount
-    const discount = this.appliedDiscount();
+    // Apply discount from cart
+    const discount = this.appliedDiscount;
     if (discount) {
       if (discount.discountType === 'Percent') {
         total = total * (1 - discount.value / 100);
@@ -78,7 +75,7 @@ export class CheckoutComponent implements OnInit {
 
   get discountAmount(): number {
     const subtotal = this.cartService.cartTotal();
-    const discount = this.appliedDiscount();
+    const discount = this.appliedDiscount;
     if (!discount) return 0;
 
     if (discount.discountType === 'Percent') {
@@ -86,33 +83,6 @@ export class CheckoutComponent implements OnInit {
     } else {
       return discount.value;
     }
-  }
-
-  applyDiscount() {
-    if (!this.discountCode.trim()) return;
-
-    this.discountError.set('');
-    this.discountService.checkCode(this.discountCode).subscribe({
-      next: (discount) => {
-        // Validate minimum order
-        if (this.cartService.cartTotal() < discount.minimumOrderAmount) {
-          this.discountError.set(`Đơn hàng tối thiểu để dùng mã này là ${discount.minimumOrderAmount.toLocaleString()}đ`);
-          this.appliedDiscount.set(null);
-          return;
-        }
-        this.appliedDiscount.set(discount);
-      },
-      error: (err) => {
-        this.discountError.set(err.error || 'Mã giảm giá không hợp lệ');
-        this.appliedDiscount.set(null);
-      }
-    });
-  }
-
-  removeDiscount() {
-    this.appliedDiscount.set(null);
-    this.discountCode = '';
-    this.discountError.set('');
   }
 
   ngOnInit() {
@@ -203,9 +173,9 @@ export class CheckoutComponent implements OnInit {
       shippingAddressId: null, // Logic chọn address có sẵn chưa implement, hiện tại dùng inline
       recipientName: this.shippingInfo.fullName,
       phone: this.shippingInfo.phone,
-      streetAddress: this.shippingInfo.address,
-      city: this.selectedProvinceCode, // Lưu ý: Nên lưu tên Tỉnh/TP thay vì code nếu backend cần display text
-      discountCodeUsed: this.discountCode || null,
+      streetAddress: fullAddress, // Gửi địa chỉ đầy đủ
+      city: location.province, // Gửi tên tỉnh/thành phố thay vì code
+      discountCodeUsed: this.appliedDiscount?.code || null,
       discountAmount: this.discountAmount,
       items: this.cartService.cartItems().map(item => ({
         productId: item.productId,

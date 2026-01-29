@@ -24,6 +24,7 @@ export class AdminOrdersComponent implements OnInit {
 
     statusFilter = '';
     selectedOrder: Order | null = null;
+    showOrderDetailModal = false;
     showDeleteModal = false;
     orderToDelete: Order | null = null;
 
@@ -92,6 +93,12 @@ export class AdminOrdersComponent implements OnInit {
 
     viewOrder(order: Order) {
         this.selectedOrder = order;
+        this.showOrderDetailModal = true;
+    }
+
+    closeOrderDetail() {
+        this.showOrderDetailModal = false;
+        this.selectedOrder = null;
     }
 
     updateStatus(order: Order) {

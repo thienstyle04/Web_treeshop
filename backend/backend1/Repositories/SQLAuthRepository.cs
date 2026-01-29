@@ -50,8 +50,9 @@ namespace backend1.Repositories
 
         public async Task<LoginResponseDTO?> LoginAsync(LoginRequestDTO request)
         {
-            // Tìm user theo tên đăng nhập
-            var user = await GetUserByNameAsync(request.Name);
+            // Tìm user theo tên đăng nhập HOẶC email
+            var user = await _dbContext.Users
+                .FirstOrDefaultAsync(u => u.Name == request.Name || u.Email == request.Name);
             if (user == null)
             {
                 return null; // User không tồn tại
