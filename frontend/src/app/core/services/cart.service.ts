@@ -4,6 +4,7 @@ import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { CartItem, AddToCartRequest } from '../models';
 import { AuthService } from './auth.service';
+import { Discount } from './discount.service';
 
 @Injectable({
     providedIn: 'root'
@@ -68,5 +69,18 @@ export class CartService {
 
     clearLocalCart(): void {
         this.cartItemsSignal.set([]);
+        this.appliedDiscountSignal.set(null);
+    }
+
+    // Discount management
+    private appliedDiscountSignal = signal<Discount | null>(null);
+    appliedDiscount = computed(() => this.appliedDiscountSignal());
+
+    setAppliedDiscount(discount: Discount | null): void {
+        this.appliedDiscountSignal.set(discount);
+    }
+
+    clearAppliedDiscount(): void {
+        this.appliedDiscountSignal.set(null);
     }
 }

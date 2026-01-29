@@ -54,6 +54,10 @@ namespace backend1.Repositories
                     OrderStatus = order.OrderStatus,
                     TotalAmount = order.TotalAmount,
                     UserId = order.UserId,
+                    RecipientName = order.ShippingAddress != null ? order.ShippingAddress.RecipientName : null,
+                    Phone = order.ShippingAddress != null ? order.ShippingAddress.Phone : null,
+                    StreetAddress = order.ShippingAddress != null ? order.ShippingAddress.StreetAddress : null,
+                    City = order.ShippingAddress != null ? order.ShippingAddress.City : null,
                     OrderItems = order.OrderItems.Select(oi => new OrderDetailItemDTO
                     {
                         ProductId = oi.ProductId,
@@ -61,7 +65,6 @@ namespace backend1.Repositories
                         Quantity = oi.Quantity,
                         Price = oi.UnitPrice
                     }).ToList()
-                    // Map thêm các trường khác nếu cần
                 })
                 .ToListAsync();
         }
@@ -200,6 +203,9 @@ namespace backend1.Repositories
                 OrderStatus = o.OrderStatus,
                 UserId = o.UserId,
                 RecipientName = o.ShippingAddress?.RecipientName,
+                Phone = o.ShippingAddress?.Phone,
+                StreetAddress = o.ShippingAddress?.StreetAddress,
+                City = o.ShippingAddress?.City,
                 OrderItems = o.OrderItems.Select(oi => new OrderDetailItemDTO
                 {
                     ProductId = oi.ProductId,

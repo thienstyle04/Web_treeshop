@@ -22,8 +22,12 @@ export class CartComponent implements OnInit {
 
   // Discount
   availableDiscounts = signal<Discount[]>([]);
-  appliedDiscount = signal<Discount | null>(null);
   showDiscountModal = signal(false);
+
+  // Use CartService's appliedDiscount
+  get appliedDiscount() {
+    return this.cartService.appliedDiscount();
+  }
 
   get isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
@@ -31,7 +35,7 @@ export class CartComponent implements OnInit {
 
   get discountAmount(): number {
     const subtotal = this.cartService.cartTotal();
-    const discount = this.appliedDiscount();
+    const discount = this.appliedDiscount;
     if (!discount) return 0;
 
     if (discount.discountType === 'Percent') {
@@ -92,12 +96,12 @@ export class CartComponent implements OnInit {
       alert(`Đơn hàng tối thiểu để dùng mã này là ${discount.minimumOrderAmount.toLocaleString()}đ`);
       return;
     }
-    this.appliedDiscount.set(discount);
+    this.cartService.setAppliedDiscount(discount);
     this.closeDiscountModal();
   }
 
   removeDiscount() {
-    this.appliedDiscount.set(null);
+    this.cartService.clearAppliedDiscount();
   }
 
   updateQuantity(itemId: number, quantity: number) {

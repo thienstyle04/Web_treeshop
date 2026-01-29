@@ -85,7 +85,7 @@
                 <!-- Discount Code Section -->
                 <div class="discount-section">
                     <label>Mã giảm giá</label>
-                    @if (!appliedDiscount()) {
+                    @if (!appliedDiscount) {
                     <button class="select-discount-btn" (click)="openDiscountModal()">
                         🎟️ Chọn mã giảm giá
                         @if (availableDiscounts().length > 0) {
@@ -95,11 +95,11 @@
                     } @else {
                     <div class="applied-discount">
                         <span class="discount-tag">
-                            🎟️ {{ appliedDiscount()?.code }}
-                            @if (appliedDiscount()?.discountType === 'Percent') {
-                            (-{{ appliedDiscount()?.value }}%)
+                            🎟️ {{ appliedDiscount?.code }}
+                            @if (appliedDiscount?.discountType === 'Percent') {
+                            (-{{ appliedDiscount?.value }}%)
                             } @else {
-                            (-{{ appliedDiscount()?.value | number:'1.0-0' }}đ)
+                            (-{{ appliedDiscount?.value | number:'1.0-0' }}đ)
                             }
                         </span>
                         <button class="remove-discount" (click)="removeDiscount()">×</button>
@@ -112,7 +112,7 @@
                     <span>{{ cartService.cartTotal() | number:'1.0-0' }}đ</span>
                 </div>
 
-                @if (appliedDiscount()) {
+                @if (appliedDiscount) {
                 <div class="summary-row discount">
                     <span>Giảm giá</span>
                     <span>-{{ discountAmount | number:'1.0-0' }}đ</span>
